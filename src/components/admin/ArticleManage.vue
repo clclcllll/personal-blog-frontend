@@ -186,7 +186,7 @@ export default {
     const deleteArticleById = async (id) => {
       if (confirm('确定要删除这篇文章吗？')) {
         try {
-          await deleteTag(id);
+          await deleteArticle(id);
           await loadTags();
         } catch (error) {
           console.error('Failed to delete tag:', error);
