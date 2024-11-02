@@ -171,12 +171,12 @@ export default {
     const submitForm = async () => {
       try {
         if (isEditing.value) {
-          await updateTag(currentTagId.value, { ...form });
+          await updateArticle(currentArticleId.value, { ...form });
         } else {
-          await createTag({ ...form });
+          await createArticle({ ...form });
         }
         isModalVisible.value = false;
-        await loadTags();
+        await loadArticles();
       } catch (error) {
         console.error('Failed to submit form:', error);
       }
@@ -187,7 +187,7 @@ export default {
       if (confirm('确定要删除这篇文章吗？')) {
         try {
           await deleteArticle(id);
-          await loadTags();
+          await loadArticles();
         } catch (error) {
           console.error('Failed to delete tag:', error);
         }
