@@ -8,4 +8,5 @@ export function showMessage(type, message) {
         type,
         duration: 3000,
     });
+
 }

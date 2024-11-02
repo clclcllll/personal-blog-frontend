@@ -13,6 +13,7 @@
         <th>标题</th>
         <th>作者</th>
         <th>分类</th>
+        <th>标签</th> <!-- 新增标签列 -->
         <th>发布时间</th>
         <th>操作</th>
       </tr>
@@ -22,7 +23,12 @@
         <td>{{ article.title }}</td>
         <td>{{ article.author.username }}</td>
         <td>{{ article.category.name }}</td>
+        <td>
+          <!-- 显示标签 -->
+          <span v-for="tag in article.tags" :key="tag._id" class="tag">{{ tag.name }}</span>
+        </td>
         <td>{{ formatDate(article.createdAt) }}</td>
+
         <td>
           <button @click="editArticle(article)">编辑</button>
           <button @click="deleteArticle(article._id)">删除</button>
@@ -58,6 +64,15 @@
           </select>
         </div>
         <div class="form-group">
+          <label for="tags">标签</label>
+          <select id="tags" v-model="form.tags" multiple>
+            <option disabled value="">请选择标签</option>
+            <option v-for="tag in tags" :value="tag._id" :key="tag._id">
+              {{ tag.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="content">内容</label>
           <textarea id="content" v-model="form.content"></textarea>
         </div>
@@ -75,8 +90,10 @@ import { ref, reactive, onMounted } from 'vue';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '@/api/article';
 import { getCategories } from '@/api/category';
 import { format } from 'date-fns';
+import {createTag, deleteTag, getTags, updateTag} from '@/api/tag';
 import Pagination from '@/components/common/Pagination.vue';
 import Modal from '@/components/common/Modal.vue';
+import {showMessage} from "@/utils/message.js";
 
 export default {
   name: 'ArticleManage',
@@ -87,16 +104,20 @@ export default {
   setup() {
     const articles = ref([]);
     const categories = ref([]);
+    const tags = ref([]); // 添加标签列表
     const page = ref(1);
     const pages = ref(1);
     const isModalVisible = ref(false);
     const isEditing = ref(false);
     const currentArticleId = ref(null);
 
+
+
     const form = reactive({
       title: '',
       category: '',
       content: '',
+      tags: [], // 添加标签字段
     });
 
     const loadArticles = async (pageNumber = 1) => {
@@ -118,12 +139,20 @@ export default {
         console.error('Failed to load categories:', error);
       }
     };
-
+    const loadTags = async () => {
+      try {
+        const response = await getTags();
+        tags.value = response.tags;
+      } catch (error) {
+        console.error('Failed to load tags:', error);
+      }
+    };
     const openCreateModal = () => {
       isEditing.value = false;
       currentArticleId.value = null;
       form.title = '';
       form.category = '';
+      form.tags = []; // 清空标签
       form.content = '';
       isModalVisible.value = true;
     };
@@ -133,31 +162,34 @@ export default {
       currentArticleId.value = article._id;
       form.title = article.title;
       form.category = article.category._id;
+      form.tags = article.tags.map(tag => tag._id); // 加载已选中的标签
       form.content = article.content;
       isModalVisible.value = true;
     };
 
+    // 提交表单
     const submitForm = async () => {
       try {
         if (isEditing.value) {
-          await updateArticle(currentArticleId.value, { ...form });
+          await updateTag(currentTagId.value, { ...form });
         } else {
-          await createArticle({ ...form });
+          await createTag({ ...form });
         }
         isModalVisible.value = false;
-        loadArticles(page.value);
+        await loadTags();
       } catch (error) {
         console.error('Failed to submit form:', error);
       }
     };
 
+    // 删除文章
     const deleteArticleById = async (id) => {
       if (confirm('确定要删除这篇文章吗？')) {
         try {
-          await deleteArticle(id);
-          loadArticles(page.value);
+          await deleteTag(id);
+          await loadTags();
         } catch (error) {
-          console.error('Failed to delete article:', error);
+          console.error('Failed to delete tag:', error);
         }
       }
     };
@@ -173,11 +205,13 @@ export default {
     onMounted(() => {
       loadArticles();
       loadCategories();
+      loadTags(); // 加载标签列表
     });
 
     return {
       articles,
       categories,
+      tags, // 返回标签列表
       page,
       pages,
       isModalVisible,

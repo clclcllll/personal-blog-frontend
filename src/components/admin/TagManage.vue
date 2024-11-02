@@ -96,7 +96,7 @@ export default {
           await createTag({ ...form });
         }
         isModalVisible.value = false;
-        loadTags();
+        await loadTags();
       } catch (error) {
         console.error('Failed to submit form:', error);
       }
@@ -106,7 +106,7 @@ export default {
       if (confirm('确定要删除这个标签吗？')) {
         try {
           await deleteTag(id);
-          loadTags();
+          await loadTags();
         } catch (error) {
           console.error('Failed to delete tag:', error);
         }

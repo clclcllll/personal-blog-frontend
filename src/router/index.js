@@ -114,7 +114,7 @@ const router = createRouter({
     routes,
 });
 
-// 路由守卫
+// //路由守卫
 // router.beforeEach((to, from, next) => {
 //     const isAuthenticated = store.getters['user/isAuthenticated'];// 通过 store 获取用户认证状态
 //     const userRole = store.state.user.userInfo?.role;// 通过 store 获取用户角色
