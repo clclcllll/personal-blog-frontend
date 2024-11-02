@@ -20,10 +20,20 @@ const routes = [
         props: true,
     },
     {
+        path: '/categories',
+        name: 'Categories',
+        component: () => import('@/views/Categories.vue'),
+    },
+    {
         path: '/category/:id',
         name: 'Category',
         component: () => import('@/views/Category.vue'),
         props: true,
+    },
+    {
+        path: '/tags',
+        name: 'Tags',
+        component: () => import('@/views/Tags.vue'),
     },
     {
         path: '/tag/:id',

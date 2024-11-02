@@ -20,9 +20,10 @@
         <router-link :to="{ name: 'Tag', params: { id: tag._id } }">{{ tag.name }}</router-link>
       </span>
     </div>
-    <div class="like-button">
+    <div v-if="article && article._id" class="like-button">
       <button @click="toggleLike">{{ liked ? '取消点赞' : '点赞' }}（{{ article.likes }}）</button>
     </div>
+
     <CommentList :articleId="article._id" />
   </div>
   <div v-else>加载中...</div>
@@ -59,15 +60,29 @@ export default {
     };
 
     const toggleLike = async () => {
-      if (liked.value) {
-        await unlikeArticle(currentArticle.value._id);
-        liked.value = false;
-      } else {
-        await likeArticle(currentArticle.value._id);
-        liked.value = true;
+
+      // 检查 article 数据是否已加载，并确保有 _id 属性
+      if (!article.value || !article.value._id) {
+        console.warn("文章尚未加载完成，无法点赞");
+        return;
       }
-      // 更新文章点赞数
-      loadArticle();
+
+      try {
+        if (liked.value) {
+          await unlikeArticle(article.value._id);
+          liked.value = false;
+        } else {
+          await likeArticle(article.value._id);
+          liked.value = true;
+        }
+
+        // 更新文章点赞数
+        loadArticle();
+
+      } catch (error) {
+        console.error("点赞操作失败：", error);
+      }
+
     };
 
     onMounted(() => {

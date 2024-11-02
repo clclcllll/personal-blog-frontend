@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
-import { mapActions, mapState } from 'vuex';
+import {ref, onMounted, watch, computed} from 'vue';
+import {mapActions, mapState, useStore} from 'vuex';
 import CommentItem from './CommentItem.vue';
 import CommentForm from './CommentForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
@@ -43,13 +43,17 @@ export default {
     },
   },
   setup(props) {
+
+    const store = useStore();
+
+    const comments = computed(() => store.state.comment.comments);
+    const total = computed(() => store.state.comment.total);
+    const page = computed(() => store.state.comment.page);
+    const pages = computed(() => store.state.comment.pages);
+
+
     const { fetchComments } = mapActions('comment', ['fetchComments']);
-    const { comments, total, page, pages } = mapState('comment', [
-      'comments',
-      'total',
-      'page',
-      'pages',
-    ]);
+
 
     const currentPage = ref(1);
 

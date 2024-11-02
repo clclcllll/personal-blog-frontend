@@ -3,6 +3,7 @@
 <template>
   <div class="home-page">
     <Navbar />
+    首页
     <div class="container">
       <ArticleList />
     </div>
