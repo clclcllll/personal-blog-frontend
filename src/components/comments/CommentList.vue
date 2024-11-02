@@ -1,11 +1,105 @@
-<script setup>
-
-</script>
+<!-- src/components/comments/CommentList.vue -->
 
 <template>
-
+  <div class="comment-section">
+    <h3>{{ total }} 条评论</h3>
+    <!-- 评论列表 -->
+    <div class="comments">
+      <CommentItem
+          v-for="comment in comments"
+          :key="comment._id"
+          :comment="comment"
+      />
+    </div>
+    <!-- 分页器 -->
+    <Pagination
+        :currentPage="page"
+        :totalPages="pages"
+        @page-changed="onPageChanged"
+    />
+    <!-- 评论表单 -->
+    <CommentForm :articleId="articleId" @comment-added="onCommentAdded" />
+  </div>
 </template>
 
-<style scoped>
+<script>
+import { ref, onMounted, watch } from 'vue';
+import { mapActions, mapState } from 'vuex';
+import CommentItem from './CommentItem.vue';
+import CommentForm from './CommentForm.vue';
+import Pagination from '@/components/common/Pagination.vue';
 
+export default {
+  name: 'CommentList',
+  components: {
+    CommentItem,
+    CommentForm,
+    Pagination,
+  },
+  props: {
+    articleId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { fetchComments } = mapActions('comment', ['fetchComments']);
+    const { comments, total, page, pages } = mapState('comment', [
+      'comments',
+      'total',
+      'page',
+      'pages',
+    ]);
+
+    const currentPage = ref(1);
+
+    const loadComments = (page = 1) => {
+      fetchComments({
+        articleId: props.articleId,
+        page,
+        limit: 10,
+      });
+    };
+
+    const onPageChanged = (newPage) => {
+      currentPage.value = newPage;
+      loadComments(newPage);
+    };
+
+    const onCommentAdded = () => {
+      // 重新加载评论列表
+      loadComments(currentPage.value);
+    };
+
+    onMounted(() => {
+      loadComments();
+    });
+
+    watch(
+        () => props.articleId,
+        () => {
+          loadComments();
+        }
+    );
+
+    return {
+      comments,
+      total,
+      page,
+      pages,
+      currentPage,
+      onPageChanged,
+      onCommentAdded,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.comment-section {
+  margin-top: 40px;
+}
+.comments {
+  margin-bottom: 20px;
+}
 </style>
