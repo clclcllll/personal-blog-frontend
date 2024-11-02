@@ -24,7 +24,7 @@
       <!-- 用户操作 -->
       <div class="user-actions">
         <template v-if="isAuthenticated">
-          <span>欢迎，{{ userInfo.username }}</span>
+          <span v-if="userInfo.username">欢迎，{{ userInfo.username }}</span>
           <button @click="logout">注销</button>
         </template>
         <template v-else>

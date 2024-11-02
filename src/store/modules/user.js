@@ -5,7 +5,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
     token: getToken(),
-    userInfo: null
+    userInfo:{} // 默认值设置为空对象
 }
 
 const mutations = {
