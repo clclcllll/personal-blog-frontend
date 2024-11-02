@@ -55,6 +55,8 @@ export default {
         users.value = response.users;
         page.value = response.page;
         pages.value = response.pages;
+        //显示page和pages
+          console.log(page.value,pages.value);
       } catch (error) {
         console.error('Failed to load users:', error);
       }

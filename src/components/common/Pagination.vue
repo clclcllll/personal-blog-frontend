@@ -1,7 +1,7 @@
 <!-- src/components/common/Pagination.vue -->
 
 <template>
-  <div class="pagination" v-if="totalPages > 1">
+  <div class="pagination" v-if="totalPages >= 1">
     <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
       上一页
     </button>

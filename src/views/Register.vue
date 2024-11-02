@@ -2,7 +2,7 @@
 
 <template>
   <div class="register-page">
-
+    <Navbar />
     <div class="container">
       <RegisterForm />
     </div>
@@ -12,6 +12,7 @@
 
 <script>
 
+import Navbar from '@/components/common/Navbar.vue';
 import Footer from '@/components/common/Footer.vue';
 import RegisterForm from '@/components/users/RegisterForm.vue';
 
@@ -20,6 +21,7 @@ export default {
   components: {
     Footer,
     RegisterForm,
+    Navbar,
   },
 };
 </script>

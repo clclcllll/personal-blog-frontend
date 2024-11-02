@@ -9,6 +9,11 @@ const routes = [
         component: () => import('@/views/Home.vue'),
     },
     {
+        path: '/about',
+        name: 'About',
+        component: () => import('@/views/About.vue'),
+    },
+    {
         path: '/article/:id',
         name: 'ArticleDetail',
         component: () => import('@/views/ArticleDetail.vue'),
@@ -100,30 +105,33 @@ const router = createRouter({
 });
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
-    const isAuthenticated = store.getters['user/isAuthenticated'];
-    const userRole = store.state.user.userInfo?.role;
-
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        // 需要身份认证的路由
-        if (!isAuthenticated) {
-            next({ name: 'Login' });
-        } else if (to.path.startsWith('/admin') && userRole !== 'admin') {
-            // 非管理员访问后台，重定向到首页
-            next({ name: 'Home' });
-        } else {
-            next();
-        }
-    } else if (to.matched.some(record => record.meta.requiresGuest)) {
-        // 访客路由，已登录用户不能访问
-        if (isAuthenticated) {
-            next({ name: 'Home' });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     const isAuthenticated = store.getters['user/isAuthenticated'];// 通过 store 获取用户认证状态
+//     const userRole = store.state.user.userInfo?.role;// 通过 store 获取用户角色
+//
+//     console.log('Navigating to:', to.name);
+//     console.log('Is Authenticated:', isAuthenticated);
+//
+//     if (to.matched.some(record => record.meta.requiresAuth)) {// 判断路由是否需要身份认证
+//         // 需要身份认证的路由
+//         if (!isAuthenticated) {
+//             next({ name: 'Login' });
+//         } else if (to.path.startsWith('/admin') && userRole !== 'admin') {
+//             // 非管理员访问后台，重定向到首页
+//             next({ name: 'Home' });
+//         } else {
+//             next();
+//         }
+//     } else if (to.matched.some(record => record.meta.requiresGuest)) {
+//         // 访客路由，已登录用户不能访问
+//         if (isAuthenticated) {
+//             next({ name: 'Home' });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;

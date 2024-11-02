@@ -35,6 +35,7 @@
 <script>
 import {mapActions, useStore} from 'vuex';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'LoginForm',
@@ -44,13 +45,17 @@ export default {
 
     const { login } = mapActions('user', ['login']);
     const store = useStore();
+    const router = useRouter(); // 获取 router 实例
+
 
     const onSubmit = async () => {
       try {
         await store.dispatch('user/login', { email: email.value, password: password.value });
         // 登录成功，跳转到首页
-        store.$router.push({ name: 'Home' });
+        await router.push({name: 'Home'}); // 使用 router.push 进行导航
       } catch (error) {
+        // 处理登录失败的情况，显示错误消息
+        console.error("Login error:", error);
         // 处理登录失败的情况，显示错误消息
         alert(error.response?.data?.error || '登录失败，请重试');
       }
