@@ -7,7 +7,7 @@ const state = {
     total: 0,
     page: 1,
     pages: 1,
-    currentArticle: null
+    currentArticle: {}, // 存储当前文章
 }
 
 const mutations = {
@@ -36,9 +36,18 @@ const actions = {
     async fetchArticleById({ commit }, id) {
         try {
             const response = await getArticleById(id)
-            commit('SET_CURRENT_ARTICLE', response.article)
+            console.log("完整的响应数据：", response); // 打印整个响应结构
+
+            // 检查 response.data 是否存在
+            if (response.article) {
+                commit('SET_CURRENT_ARTICLE', response.article);
+                console.log(response.article); // 检查数据结构
+            } else {
+                console.error("响应中缺少 data 或 article 属性");
+            }
+
         } catch (error) {
-            console.error(error)
+            console.error("获取文章详情出错:", error);
         }
     },
     // 创建文章

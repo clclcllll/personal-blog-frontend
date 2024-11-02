@@ -9,7 +9,7 @@
     />
     <!-- 分页器 -->
     <Pagination
-        :currentPage="page"
+        :currentPage="currentPage"
         :totalPages="pages"
         @page-changed="onPageChanged"
     />
@@ -19,7 +19,7 @@
 <script>
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { mapActions, mapState } from 'vuex';
+import { useStore } from 'vuex';
 import ArticleItem from './ArticleItem.vue';
 import Pagination from '@/components/common/Pagination.vue';
 
@@ -30,30 +30,29 @@ export default {
     Pagination,
   },
   setup() {
+    const store = useStore(); // 使用 useStore() 获取 store 实例
     const route = useRoute();
-    const { fetchArticles } = mapActions('article', ['fetchArticles']);
-    const { articles, total, page, pages } = mapState('article', [
-      'articles',
-      'total',
-      'page',
-      'pages',
-    ]);
-
     const currentPage = ref(1);
 
+    // 从 store 中获取状态
+    const articles = store.state.article.articles;
+    const total = store.state.article.total;
+    const page = store.state.article.page;
+    const pages = store.state.article.pages;
+
+    // 调用 store 中的 actions
     const loadArticles = (page = 1) => {
       const params = {
         page,
         limit: 10,
       };
-      // 如果有分类或标签参数
       if (route.params.categoryId) {
         params.category = route.params.categoryId;
       }
       if (route.params.tagId) {
         params.tag = route.params.tagId;
       }
-      fetchArticles(params);
+      store.dispatch('article/fetchArticles', params); // 调用 fetchArticles action
     };
 
     const onPageChanged = (newPage) => {

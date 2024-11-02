@@ -1,12 +1,17 @@
 <!-- src/components/articles/ArticleDetail.vue -->
 
 <template>
-  <div class="article-detail">
+  <div v-if="article && article.author" class="article-detail">
     <h1>{{ article.title }}</h1>
     <div class="meta">
       <span>作者：{{ article.author.username }}</span>
       <span>发布时间：{{ formatDate(article.createdAt) }}</span>
-      <span>分类：<router-link :to="{ name: 'Category', params: { id: article.category._id } }">{{ article.category.name }}</router-link></span>
+      <span>
+        分类：
+        <router-link :to="{ name: 'Category', params: { id: article.category._id } }">
+          {{ article.category.name }}
+        </router-link>
+      </span>
       <span>阅读：{{ article.views }} 次</span>
     </div>
     <div class="content" v-html="article.htmlContent"></div>
@@ -15,22 +20,24 @@
         <router-link :to="{ name: 'Tag', params: { id: tag._id } }">{{ tag.name }}</router-link>
       </span>
     </div>
-    <!-- 点赞按钮 -->
     <div class="like-button">
       <button @click="toggleLike">{{ liked ? '取消点赞' : '点赞' }}（{{ article.likes }}）</button>
     </div>
-    <!-- 评论列表 -->
     <CommentList :articleId="article._id" />
   </div>
+  <div v-else>加载中...</div>
 </template>
 
+
 <script>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 import { mapActions, mapState } from 'vuex';
 import { format } from 'date-fns';
 import CommentList from '@/components/comments/CommentList.vue';
 import { likeArticle, unlikeArticle } from '@/api/like';
+import store from "@/store/index.js";
 
 export default {
   name: 'ArticleDetail',
@@ -43,9 +50,12 @@ export default {
     const { currentArticle } = mapState('article', ['currentArticle']);
 
     const liked = ref(false);
+    // 使用计算属性绑定当前文章
+    const article = computed(() => store.state.article.currentArticle);
 
-    const loadArticle = () => {
-      fetchArticleById(route.params.id);
+
+    const loadArticle = async () => {
+      await store.dispatch('article/fetchArticleById', route.params.id);
     };
 
     const toggleLike = async () => {
@@ -69,7 +79,7 @@ export default {
     };
 
     return {
-      article: currentArticle,
+      article, // 使用计算属性 article
       formatDate,
       liked,
       toggleLike,
