@@ -17,8 +17,9 @@ const mutations = {
         state.page = data.page
         state.pages = data.pages
     },
-    SET_CURRENT_ARTICLE(state, article) {
-        state.currentArticle = article
+    SET_CURRENT_ARTICLE(state, payload) { // 确保参数名为 payload
+        state.currentArticle = payload.article;
+        state.currentArticle.liked = payload.liked; // 设置 liked 状态
     }
 }
 
@@ -29,25 +30,24 @@ const actions = {
             const response = await getArticles(params)
             commit('SET_ARTICLES', response)
         } catch (error) {
-            console.error(error)
+            console.error('获取文章列表失败：', error);
         }
     },
     // 获取文章详情
     async fetchArticleById({ commit }, id) {
         try {
             const response = await getArticleById(id)
-            console.log("完整的响应数据：", response); // 打印整个响应结构
 
-            // 检查 response.data 是否存在
-            if (response.article) {
-                commit('SET_CURRENT_ARTICLE', response.article);
-                console.log(response.article); // 检查数据结构
+            // 检查 response 是否包含 article 和 liked
+            if (response.article && typeof response.liked !== 'undefined') {
+                commit('SET_CURRENT_ARTICLE', response); // 传递整个响应对象
             } else {
-                console.error("响应中缺少 data 或 article 属性");
+                console.error("响应中缺少 article 或 liked 属性");
             }
 
         } catch (error) {
             console.error("获取文章详情出错:", error);
+            throw error; // 抛出错误以便前端捕获
         }
     },
     // 创建文章

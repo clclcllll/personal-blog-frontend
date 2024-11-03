@@ -32,6 +32,7 @@ export default {
   setup() {
     const store = useStore(); // 使用 useStore() 获取 store 实例
     const route = useRoute(); // 使用 useRoute() 获取当前路由信息
+
     const currentPage = ref(1);
 
     // 获取响应式的文章列表、总数、当前页、总页数

@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import {ref, onMounted, watch, computed} from 'vue';
-import {mapActions, mapState, useStore} from 'vuex';
+import { ref, onMounted, watch, computed } from 'vue';
+import { useStore } from 'vuex';
 import CommentItem from './CommentItem.vue';
 import CommentForm from './CommentForm.vue';
 import Pagination from '@/components/common/Pagination.vue';
@@ -52,17 +52,19 @@ export default {
     const pages = computed(() => store.state.comment.pages);
 
 
-    const { fetchComments } = mapActions('comment', ['fetchComments']);
-
 
     const currentPage = ref(1);
 
-    const loadComments = (page = 1) => {
-      fetchComments({
-        articleId: props.articleId,
-        page,
-        limit: 10,
-      });
+    const loadComments = async (pageNum = 1) => {
+      try {
+        await store.dispatch('comment/fetchComments', {
+          articleId: props.articleId,
+          page: pageNum,
+          limit: 10,
+        });
+      } catch (error) {
+        console.error('加载评论失败：', error);
+      }
     };
 
     const onPageChanged = (newPage) => {

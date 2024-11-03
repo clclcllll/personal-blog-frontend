@@ -24,6 +24,7 @@
       <button @click="toggleLike">{{ liked ? '取消点赞' : '点赞' }}（{{ article.likes }}）</button>
     </div>
 
+
     <CommentList :articleId="article._id" />
   </div>
   <div v-else>加载中...</div>
@@ -31,15 +32,12 @@
 
 
 <script>
-import {ref, onMounted, computed, watch} from 'vue';
-import { mapActions, mapState } from 'vuex';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 import { format } from 'date-fns';
 import CommentList from '@/components/comments/CommentList.vue';
 import { likeArticle, unlikeArticle } from '@/api/like';
-import store from "@/store/index.js";
-
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 
 export default {
   name: 'ArticleDetail',
@@ -48,17 +46,21 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const { fetchArticleById } = mapActions('article', ['fetchArticleById']);
-    const { currentArticle } = mapState('article', ['currentArticle']);
     const store = useStore();
+
 
     const liked = ref(false);
     // 使用计算属性绑定当前文章
     const article = computed(() => store.state.article.currentArticle);
 
-
     const loadArticle = async () => {
-      await store.dispatch('article/fetchArticleById', route.params.id);
+      try {
+        await store.dispatch('article/fetchArticleById', route.params.id);
+        // 设置 liked 状态
+        liked.value = article.value.liked;
+      } catch (error) {
+        console.error('加载文章详情失败：', error);
+      }
     };
 
     const toggleLike = async () => {
@@ -68,17 +70,30 @@ export default {
         console.warn("文章尚未加载完成，无法点赞");
         return;
       }
-
+      //打印liked.value
+      console.log(liked.value);
 
       try {
         if (liked.value) {
-          await unlikeArticle(article.value._id);
-          liked.value = false;
-          article.value.likes -= 1; // 减少点赞数
+          const response = await unlikeArticle(article.value._id);
+          liked.value = response.liked; // 设置为 false
+          article.value.likes = response.likes; // 更新点赞数
+          // 更新文章点赞数 in store
+          store.commit('article/SET_CURRENT_ARTICLE', {
+            article: { ...article.value, likes: response.likes },
+            liked: response.liked
+          });
+
         } else {
-          await likeArticle(article.value._id);
-          liked.value = true;
-          article.value.likes += 1; // 增加点赞数
+          const response = await likeArticle(article.value._id);
+          liked.value = response.liked; // 设置为 true
+          article.value.likes = response.likes; // 更新点赞数
+          // 更新 article in store
+          store.commit('article/SET_CURRENT_ARTICLE', {
+            article: { ...article.value, likes: response.likes },
+            liked: response.liked
+          });
+
         }
 
       } catch (error) {
@@ -91,11 +106,14 @@ export default {
       loadArticle();
     });
     // 监听路由参数变化
-    watch(() => route.params.id, async (newId) => {
-      if (newId) {
-        await loadArticle();
-      }
-    });
+    watch(
+        () => route.params.id,
+        (newId) => {
+          if (newId) {
+            loadArticle();
+          }
+        }
+    );
 
     const formatDate = (date) => {
       return format(new Date(date), 'yyyy-MM-dd HH:mm');
