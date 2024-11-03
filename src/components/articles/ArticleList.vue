@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch,computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import ArticleItem from './ArticleItem.vue';
@@ -34,11 +34,12 @@ export default {
     const route = useRoute(); // 使用 useRoute() 获取当前路由信息
     const currentPage = ref(1);
 
-    // 从 store 中获取状态
-    const articles = store.state.article.articles;
-    const total = store.state.article.total;
-    const page = store.state.article.page;
-    const pages = store.state.article.pages;
+    // 获取响应式的文章列表、总数、当前页、总页数
+    const articles = computed(() => store.state.article.articles);
+    const total = computed(() => store.state.article.total);
+    const page = computed(() => store.state.article.page);
+    const pages = computed(() => store.state.article.pages);
+
 
     // 调用 store 中的 actions
     const loadArticles = (page = 1) => {
@@ -53,8 +54,6 @@ export default {
         params.tag = route.params.id;
       }
 
-      //打印params
-      console.log(params);
       store.dispatch('article/fetchArticles', params); // 调用 fetchArticles action
     };
 
@@ -67,9 +66,8 @@ export default {
       loadArticles();
     });
 
-    // 监听路由变化，重新加载文章列表
     watch(
-        () => route.params,
+        () => [route.name, route.params.id],
         () => {
           loadArticles();
         }
