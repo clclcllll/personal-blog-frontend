@@ -1,5 +1,4 @@
-<!-- src/views/Category.vue -->
-
+<!--  src/views/Category.vue-->
 <template>
   <div class="category-page">
     <Navbar />

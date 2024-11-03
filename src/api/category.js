@@ -9,6 +9,13 @@ export function getCategories() {
         method: 'get',
     });
 }
+//getCategoryById
+export function getCategoryById(id) {
+    return request({
+        url: `/categories/${id}`,
+        method: 'get',
+    });
+}
 
 // 创建分类
 export function createCategory(data) {

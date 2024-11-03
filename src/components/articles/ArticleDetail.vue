@@ -31,14 +31,15 @@
 
 
 <script>
-import {ref, onMounted, computed} from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
+import {ref, onMounted, computed, watch} from 'vue';
 import { mapActions, mapState } from 'vuex';
 import { format } from 'date-fns';
 import CommentList from '@/components/comments/CommentList.vue';
 import { likeArticle, unlikeArticle } from '@/api/like';
 import store from "@/store/index.js";
+
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
   name: 'ArticleDetail',
@@ -49,6 +50,7 @@ export default {
     const route = useRoute();
     const { fetchArticleById } = mapActions('article', ['fetchArticleById']);
     const { currentArticle } = mapState('article', ['currentArticle']);
+    const store = useStore();
 
     const liked = ref(false);
     // 使用计算属性绑定当前文章
@@ -67,17 +69,17 @@ export default {
         return;
       }
 
+
       try {
         if (liked.value) {
           await unlikeArticle(article.value._id);
           liked.value = false;
+          article.value.likes -= 1; // 减少点赞数
         } else {
           await likeArticle(article.value._id);
           liked.value = true;
+          article.value.likes += 1; // 增加点赞数
         }
-
-        // 更新文章点赞数
-        loadArticle();
 
       } catch (error) {
         console.error("点赞操作失败：", error);
@@ -87,6 +89,12 @@ export default {
 
     onMounted(() => {
       loadArticle();
+    });
+    // 监听路由参数变化
+    watch(() => route.params.id, async (newId) => {
+      if (newId) {
+        await loadArticle();
+      }
     });
 
     const formatDate = (date) => {

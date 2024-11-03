@@ -22,6 +22,10 @@
         <li>
           <router-link to="/admin/users">用户管理</router-link>
         </li>
+        <!--返回首页-->
+        <li>
+          <router-link to="/">返回首页</router-link>
+        </li>
       </ul>
     </div>
     <div class="content">

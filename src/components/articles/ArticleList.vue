@@ -31,7 +31,7 @@ export default {
   },
   setup() {
     const store = useStore(); // 使用 useStore() 获取 store 实例
-    const route = useRoute();
+    const route = useRoute(); // 使用 useRoute() 获取当前路由信息
     const currentPage = ref(1);
 
     // 从 store 中获取状态
@@ -46,12 +46,15 @@ export default {
         page,
         limit: 10,
       };
-      if (route.params.categoryId) {
-        params.category = route.params.categoryId;
+
+      if (route.name === 'Category') {
+        params.category = route.params.id;
+      } else if (route.name === 'Tag') {
+        params.tag = route.params.id;
       }
-      if (route.params.tagId) {
-        params.tag = route.params.tagId;
-      }
+
+      //打印params
+      console.log(params);
       store.dispatch('article/fetchArticles', params); // 调用 fetchArticles action
     };
 

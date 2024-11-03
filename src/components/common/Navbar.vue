@@ -13,6 +13,8 @@
         <li><router-link to="/categories">分类</router-link></li>
         <li><router-link to="/tags">标签</router-link></li>
         <li><router-link to="/about">关于</router-link></li>
+        <!-- 管理员链接 -->
+        <li v-if="isAdmin"><router-link to="/admin">管理后台</router-link></li>
       </ul>
 
       <!-- 搜索框 -->
@@ -48,6 +50,10 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isAuthenticated', 'userInfo']),
+    isAdmin() {
+      // 检查用户是否为管理员
+      return this.isAuthenticated && this.userInfo.role === 'admin';
+    },
   },
   methods: {
     ...mapActions('user', ['logout']),

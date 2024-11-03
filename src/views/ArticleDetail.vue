@@ -1,6 +1,8 @@
 <!-- src/views/ArticleDetail.vue -->
 
 <template>
+
+
   <div class="article-page">
     <Navbar />
     <div class="container">
@@ -8,6 +10,8 @@
     </div>
     <Footer />
   </div>
+
+
 </template>
 
 <script>
@@ -26,6 +30,11 @@ export default {
 </script>
 
 <style scoped>
+.article-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .container {
   max-width: 800px;
   margin: 20px auto;

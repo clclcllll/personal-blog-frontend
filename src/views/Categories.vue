@@ -23,7 +23,7 @@ import Footer from "@/components/common/Footer.vue";
 
 export default {
   name: 'Categories',
-  components: {Footer, Navbar},
+  components: {Navbar, Footer},
   setup() {
     const store = useStore();
     const categories = ref([]);
