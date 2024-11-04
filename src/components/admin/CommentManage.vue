@@ -1,8 +1,9 @@
-<!-- src/components/admin/CommentManage.vue -->
-
 <template>
   <div class="comment-manage">
     <h2>评论管理</h2>
+    <!-- 全部删除按钮 -->
+    <button @click="deleteAllComments" class="delete-all-button">全部删除</button>
+
     <!-- 评论列表 -->
     <table class="comment-table">
       <thead>
@@ -38,7 +39,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { getComments, deleteComment } from '@/api/comment';
+import { getAllComments, deleteComment } from '@/api/comment';
 import Pagination from '@/components/common/Pagination.vue';
 import { format } from 'date-fns';
 
@@ -54,7 +55,7 @@ export default {
 
     const loadComments = async (pageNumber = 1) => {
       try {
-        const response = await getComments({ page: pageNumber, limit: 10 });
+        const response = await getAllComments({page: pageNumber, limit: 10});
         comments.value = response.comments;
         page.value = response.page;
         pages.value = response.pages;
@@ -74,13 +75,25 @@ export default {
       }
     };
 
+    // 新增全部删除功能
+    const deleteAllComments = async () => {
+      if (confirm('确定要删除当前页面的所有评论吗？')) {
+        try {
+          for (const comment of comments.value) {
+            await deleteComment(comment._id);
+          }
+          loadComments(page.value);
+        } catch (error) {
+          console.error('Failed to delete all comments:', error);
+        }
+      }
+    };
+
     const onPageChanged = (newPage) => {
       loadComments(newPage);
     };
 
-    const formatDate = (date) => {
-      return format(new Date(date), 'yyyy-MM-dd HH:mm');
-    };
+    const formatDate = (date) => format(new Date(date), 'yyyy-MM-dd HH:mm');
 
     onMounted(() => {
       loadComments();
@@ -91,6 +104,7 @@ export default {
       page,
       pages,
       deleteComment: deleteCommentById,
+      deleteAllComments, // 新增的全部删除方法
       onPageChanged,
       formatDate,
     };
@@ -102,15 +116,30 @@ export default {
 .comment-manage {
   padding: 20px;
 }
+
 .comment-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
+
 .comment-table th,
 .comment-table td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
+}
+
+.delete-all-button {
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-all-button:hover {
+  background-color: darkred;
 }
 </style>
