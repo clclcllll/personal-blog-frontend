@@ -1,23 +1,16 @@
-<!-- src/components/comments/CommentList.vue -->
-
 <template>
   <div class="comment-section">
     <h3>{{ total }} 条评论</h3>
-    <!-- 评论列表 -->
     <div class="comments">
       <CommentItem
           v-for="comment in comments"
           :key="comment._id"
           :comment="comment"
+          :replyToUsername="''"
+          @comment-added="onCommentAdded"
       />
     </div>
-    <!-- 分页器 -->
-    <Pagination
-        :currentPage="page"
-        :totalPages="pages"
-        @page-changed="onPageChanged"
-    />
-    <!-- 评论表单 -->
+    <Pagination :currentPage="page" :totalPages="pages" @page-changed="onPageChanged" />
     <CommentForm :articleId="articleId" @comment-added="onCommentAdded" />
   </div>
 </template>
@@ -31,28 +24,16 @@ import Pagination from '@/components/common/Pagination.vue';
 
 export default {
   name: 'CommentList',
-  components: {
-    CommentItem,
-    CommentForm,
-    Pagination,
-  },
+  components: { CommentItem, CommentForm, Pagination },
   props: {
-    articleId: {
-      type: String,
-      required: true,
-    },
+    articleId: { type: String, required: true },
   },
   setup(props) {
-
     const store = useStore();
-
     const comments = computed(() => store.state.comment.comments);
     const total = computed(() => store.state.comment.total);
     const page = computed(() => store.state.comment.page);
     const pages = computed(() => store.state.comment.pages);
-
-
-
     const currentPage = ref(1);
 
     const loadComments = async (pageNum = 1) => {
@@ -73,20 +54,16 @@ export default {
     };
 
     const onCommentAdded = () => {
-      // 重新加载评论列表
-      loadComments(currentPage.value);
+      loadComments(currentPage.value); // 重新加载当前页的评论
     };
 
     onMounted(() => {
       loadComments();
     });
 
-    watch(
-        () => props.articleId,
-        () => {
-          loadComments();
-        }
-    );
+    watch(() => props.articleId, () => {
+      loadComments();
+    });
 
     return {
       comments,
@@ -100,12 +77,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.comment-section {
-  margin-top: 40px;
-}
-.comments {
-  margin-bottom: 20px;
-}
-</style>

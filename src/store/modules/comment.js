@@ -33,7 +33,7 @@ const actions = {
         try {
             await addComment(commentData)
             // 重新获取评论列表
-            dispatch('fetchComments', { articleId: commentData.articleId })
+            dispatch('fetchComments', { articleId: commentData.articleId, page: 1, limit: 10 })
         } catch (error) {
             console.error(error)
         }
@@ -43,7 +43,7 @@ const actions = {
         try {
             await deleteComment(id)
             // 重新获取评论列表
-            dispatch('fetchComments', { articleId })
+            dispatch('fetchComments', { articleId, page: 1, limit: 10 })
         } catch (error) {
             console.error(error)
         }

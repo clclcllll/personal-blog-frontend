@@ -69,10 +69,12 @@ export default {
           payload.parentId = props.parentId;
         }
 
-        await addComment(payload);
+        const response = await addComment(payload);
 
         content.value = '';
+
         emit('comment-added');
+
       } catch (error) {
         //alert(error.response.data.error || '评论提交失败');
       }

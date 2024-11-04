@@ -1,5 +1,3 @@
-<!-- src/components/comments/CommentItem.vue -->
-
 <template>
   <div class="comment-item">
     <div class="comment-header">
@@ -7,6 +5,8 @@
       <span class="date">{{ formatDate(comment.createdAt) }}</span>
     </div>
     <div class="comment-content">
+      <!-- 仅在回复二级或更深层评论时显示 -->
+      <p v-if="replyToUsername">{{ `回复 @${replyToUsername}` }}</p>
       <p>{{ comment.content }}</p>
     </div>
     <!-- 回复按钮 -->
@@ -23,22 +23,29 @@
         :parentUsername="comment.user.username"
         @comment-added="onReplyAdded"
     />
-    <!-- 子评论 -->
+    <!-- 子评论显示在同一层级 -->
     <div class="replies" v-if="comment.replies && comment.replies.length">
       <CommentItem
-          v-for="(reply, index) in limitedReplies"
+          v-for="reply in displayedReplies"
           :key="reply._id"
           :comment="reply"
-      />
-      <button v-if="comment.replies.length > 1 && !showAllReplies" @click="toggleReplies">
-        展开更多评论（{{ comment.replies.length - 1 }}）
+          :replyToUsername="reply.replyToUsername"
+          @comment-added="$emit('comment-added')"
+      /><!-- emit事件冒泡继续向父组件传递 -->
+      <!-- 按钮控制 -->
+      <button v-if="showInitial && comment.replies.length > 3" @click="showLimited">展开</button>
+      <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll">
+        全部展开
+      </button>
+      <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length > 1" @click="collapse">
+        收起
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import { ref,computed } from 'vue';
+import {ref, computed, watch} from 'vue';
 import { format } from 'date-fns';
 import CommentForm from './CommentForm.vue';
 
@@ -52,10 +59,16 @@ export default {
       type: Object,
       required: true,
     },
+    replyToUsername: { // 用于标注回复对象的用户名
+      type: String,
+      default: '',
+    },
   },
-  setup() {
+  setup(props,{ emit }) {
     const showReply = ref(false);
     const showAllReplies = ref(false);
+    const showLimitedReplies = ref(false);
+    const showInitial = ref(true); // 初始折叠状态
 
     const formatDate = (date) => {
       return format(new Date(date), 'yyyy-MM-dd HH:mm');
@@ -63,27 +76,45 @@ export default {
 
     const onReplyAdded = () => {
       showReply.value = false;
-      // 可以在这里触发父组件重新加载评论列表
+      emit('comment-added'); // 向父组件触发更新事件
     };
-    const toggleReplies = () => {
-      showAllReplies.value = true;
-    };
-    // 限制显示的子评论数量
-    const limitedReplies = computed(() => {
+
+    const displayedReplies = computed(() => {
       if (showAllReplies.value) {
-        return comment.replies;
+        return props.comment.replies;
+      } else if (showLimitedReplies.value) {
+        return props.comment.replies.slice(0, 3);
       }
-      return comment.replies.slice(0, 1); // 只显示一个子评论
+      return [];
     });
 
+    const showLimited = () => {
+      showInitial.value = false;
+      showLimitedReplies.value = true;
+    };
+
+    const expandAll = () => {
+      showLimitedReplies.value = false;
+      showAllReplies.value = true;
+    };
+
+    const collapse = () => {
+      showAllReplies.value = false;
+      showLimitedReplies.value = false;
+      showInitial.value = true;
+    };
 
     return {
       showReply,
+      showInitial,
+      showLimitedReplies,
       showAllReplies,
       formatDate,
       onReplyAdded,
-      toggleReplies,
-      limitedReplies,
+      displayedReplies,
+      showLimited,
+      expandAll,
+      collapse,
     };
   },
 };
