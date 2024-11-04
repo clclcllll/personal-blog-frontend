@@ -4,7 +4,7 @@
   <div class="comment-form">
     <textarea
         v-model="content"
-        placeholder="请输入评论内容"
+        :placeholder="placeholder"
         rows="3"
     ></textarea>
     <button @click="submitComment">提交评论</button>
@@ -12,10 +12,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import { addComment } from '@/api/comment';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import {ElMessage} from "element-plus";
 
 export default {
   name: 'CommentForm',
@@ -28,6 +29,10 @@ export default {
       type: String,
       default: null,
     },
+    parentUsername: { // 新增 prop，用于标注回复对象的用户名
+      type: String,
+      default: '',
+    },
   },
   emits: ['comment-added'],
   setup(props, { emit }) {
@@ -35,14 +40,22 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    const placeholder = computed(() => {
+      if (props.parentUsername) {
+        return `回复 ${props.parentUsername}:`;
+      }
+      return '请输入评论内容';
+    });
+
+
     const submitComment = async () => {
       if (!store.getters['user/isAuthenticated']) {
-        alert('请先登录再发表评论');
+        ElMessage.warning('请先登录再发表评论');
         //router.push({ name: 'Login' });
         return;
       }
       if (!content.value.trim()) {
-        alert('评论内容不能为空');
+        ElMessage.warning('评论内容不能为空');
         return;
       }
       try {
@@ -68,6 +81,7 @@ export default {
     return {
       content,
       submitComment,
+      placeholder,
     };
   },
 };

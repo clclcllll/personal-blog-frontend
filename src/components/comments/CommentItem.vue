@@ -20,21 +20,25 @@
         v-if="showReply"
         :articleId="comment.article"
         :parentId="comment._id"
+        :parentUsername="comment.user.username"
         @comment-added="onReplyAdded"
     />
     <!-- 子评论 -->
     <div class="replies" v-if="comment.replies && comment.replies.length">
       <CommentItem
-          v-for="reply in comment.replies"
+          v-for="(reply, index) in limitedReplies"
           :key="reply._id"
           :comment="reply"
       />
+      <button v-if="comment.replies.length > 1 && !showAllReplies" @click="toggleReplies">
+        展开更多评论（{{ comment.replies.length - 1 }}）
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 import { format } from 'date-fns';
 import CommentForm from './CommentForm.vue';
 
@@ -51,6 +55,7 @@ export default {
   },
   setup() {
     const showReply = ref(false);
+    const showAllReplies = ref(false);
 
     const formatDate = (date) => {
       return format(new Date(date), 'yyyy-MM-dd HH:mm');
@@ -60,11 +65,25 @@ export default {
       showReply.value = false;
       // 可以在这里触发父组件重新加载评论列表
     };
+    const toggleReplies = () => {
+      showAllReplies.value = true;
+    };
+    // 限制显示的子评论数量
+    const limitedReplies = computed(() => {
+      if (showAllReplies.value) {
+        return comment.replies;
+      }
+      return comment.replies.slice(0, 1); // 只显示一个子评论
+    });
+
 
     return {
       showReply,
+      showAllReplies,
       formatDate,
       onReplyAdded,
+      toggleReplies,
+      limitedReplies,
     };
   },
 };
@@ -96,5 +115,12 @@ export default {
   margin-left: 20px;
   border-left: 2px solid #eee;
   padding-left: 10px;
+}
+.replies button {
+  background: none;
+  border: none;
+  color: #42b983;
+  cursor: pointer;
+  padding: 5px 0;
 }
 </style>
