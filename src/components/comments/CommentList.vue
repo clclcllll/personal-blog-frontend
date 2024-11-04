@@ -1,3 +1,5 @@
+<!-- src/components/comments/CommentList.vue -->
+
 <template>
   <div class="comment-section">
     <h3>{{ total }} 条评论</h3>

@@ -1,3 +1,5 @@
+<!-- src/components/comments/CommentItem.vue -->
+
 <template>
   <div class="comment-item">
     <div class="comment-header">
@@ -33,7 +35,7 @@
           @comment-added="$emit('comment-added')"
       /><!-- emit事件冒泡继续向父组件传递 -->
       <!-- 按钮控制 -->
-      <button v-if="showInitial && comment.replies.length > 3" @click="showLimited">展开</button>
+      <button v-if="showInitial" @click="showLimited">展开</button>
       <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll">
         全部展开
       </button>
@@ -80,9 +82,9 @@ export default {
     };
 
     const displayedReplies = computed(() => {
-      if (showAllReplies.value) {
+      if (showAllReplies.value) {// 全部展开
         return props.comment.replies;
-      } else if (showLimitedReplies.value) {
+      } else if (showLimitedReplies.value) {// 展开部分
         return props.comment.replies.slice(0, 3);
       }
       return [];
