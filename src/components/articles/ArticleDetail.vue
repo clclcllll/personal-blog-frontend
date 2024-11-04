@@ -70,8 +70,6 @@ export default {
         console.warn("文章尚未加载完成，无法点赞");
         return;
       }
-      //打印liked.value
-      console.log(liked.value);
 
       try {
         if (liked.value) {

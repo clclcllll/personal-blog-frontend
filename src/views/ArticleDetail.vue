@@ -2,7 +2,6 @@
 
 <template>
 
-
   <div class="article-page">
     <Navbar />
     <div class="container">
@@ -10,7 +9,6 @@
     </div>
     <Footer />
   </div>
-
 
 </template>
 

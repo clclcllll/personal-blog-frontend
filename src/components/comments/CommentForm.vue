@@ -38,7 +38,7 @@ export default {
     const submitComment = async () => {
       if (!store.getters['user/isAuthenticated']) {
         alert('请先登录再发表评论');
-        router.push({ name: 'Login' });
+        //router.push({ name: 'Login' });
         return;
       }
       if (!content.value.trim()) {
@@ -46,15 +46,22 @@ export default {
         return;
       }
       try {
-        await addComment({
+        //
+        const payload = {
           articleId: props.articleId,
           content: content.value.trim(),
-          parentId: props.parentId,
-        });
+        };
+
+        if (props.parentId) {
+          payload.parentId = props.parentId;
+        }
+
+        await addComment(payload);
+
         content.value = '';
         emit('comment-added');
       } catch (error) {
-        alert(error.response.data.error || '评论提交失败');
+        //alert(error.response.data.error || '评论提交失败');
       }
     };
 
