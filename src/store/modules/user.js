@@ -5,7 +5,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
     token: getToken(),
-    userInfo:{} // 默认值设置为空对象
+    userInfo: JSON.parse(sessionStorage.getItem('userInfo')) || {} // 初始化时从 sessionStorage 获取 userInfo
 }
 
 const mutations = {
@@ -14,6 +14,12 @@ const mutations = {
     },
     SET_USER_INFO(state, userInfo) {
         state.userInfo = userInfo
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo)) // 将 userInfo 保存到 sessionStorage
+    },
+    CLEAR_USER_INFO(state) {
+        state.token = ''
+        state.userInfo = {}
+        sessionStorage.removeItem('userInfo') // 清除 sessionStorage 中的 userInfo
     }
 }
 
@@ -33,8 +39,7 @@ const actions = {
     },
     // 用户注销
     logout({ commit }) {
-        commit('SET_TOKEN', '')
-        commit('SET_USER_INFO', null)
+        commit('CLEAR_USER_INFO')
         removeToken()
     },
     // 获取用户信息
@@ -45,8 +50,7 @@ const actions = {
             commit('SET_USER_INFO', user)
         } catch (error) {
             // 获取用户信息失败，清除 token
-            commit('SET_TOKEN', '')
-            commit('SET_USER_INFO', null)
+            commit('CLEAR_USER_INFO')
             removeToken()
         }
     }

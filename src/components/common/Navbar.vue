@@ -38,7 +38,7 @@
 
 <script>
 import { useStore } from 'vuex';
-import {computed, ref, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -53,6 +53,14 @@ export default {
     const userInfo = computed(() => store.state.user.userInfo);
     const isAdmin = computed(() => isAuthenticated.value && userInfo.value.role === 'admin');
 
+
+    // 检查用户信息是否已存在，否则获取
+    onMounted(() => {
+      if (isAuthenticated.value && !userInfo.value.username) {
+        store.dispatch('user/getUserInfo');
+      }
+    });
+
     // 调用 store 的 logout action
     const logout = () => store.dispatch('user/logout');
 
@@ -64,13 +72,6 @@ export default {
       }
     };
 
-    // 监听用户认证状态的变化
-    watch(isAuthenticated, (newVal, oldVal) => {
-      if (newVal !== oldVal) {
-        console.log(`用户认证状态已更改: ${newVal ? '已登录' : '未登录'}`);
-        // 可根据需求添加额外逻辑
-      }
-    });
 
     // 注册按钮点击处理
     const handleClick = () => {
