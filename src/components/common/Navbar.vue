@@ -1,5 +1,3 @@
-<!-- src/components/common/Navbar.vue -->
-
 <template>
   <nav class="navbar">
     <div class="container">
@@ -26,12 +24,12 @@
       <!-- 用户操作 -->
       <div class="user-actions">
         <template v-if="isAuthenticated">
-          <span v-if="userInfo.username">欢迎，{{ userInfo.username }}</span>
+          <span v-if="userInfo?.username">欢迎，{{ userInfo.username }}</span>
           <button @click="logout">注销</button>
         </template>
         <template v-else>
           <router-link to="/login">登录</router-link>
-          <router-link to="/register" @click.native="handleClick" >注册</router-link>
+          <router-link to="/register" @click.native="handleClick">注册</router-link>
         </template>
       </div>
     </div>
@@ -39,33 +37,55 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { useStore } from 'vuex';
+import {computed, ref, watch} from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'Navbar',
-  data() {
-    return {
-      keyword: '',
-    };
-  },
-  computed: {
-    ...mapGetters('user', ['isAuthenticated', 'userInfo']),
-    isAdmin() {
-      // 检查用户是否为管理员
-      return this.isAuthenticated && this.userInfo.role === 'admin';
-    },
-  },
-  methods: {
-    ...mapActions('user', ['logout']),
-    search() {
-      if (this.keyword.trim()) {
-        this.$router.push({ name: 'Search', query: { q: this.keyword.trim() } });
-        this.keyword = '';
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const keyword = ref('');
+
+    // 使用 computed 从 store 获取数据
+    const isAuthenticated = computed(() => store.getters['user/isAuthenticated']);
+    const userInfo = computed(() => store.state.user.userInfo);
+    const isAdmin = computed(() => isAuthenticated.value && userInfo.value.role === 'admin');
+
+    // 调用 store 的 logout action
+    const logout = () => store.dispatch('user/logout');
+
+    // 搜索功能
+    const search = () => {
+      if (keyword.value.trim()) {
+        router.push({ name: 'Search', query: { q: keyword.value.trim() } });
+        keyword.value = '';
       }
-    },
-    handleClick() {
+    };
+
+    // 监听用户认证状态的变化
+    watch(isAuthenticated, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        console.log(`用户认证状态已更改: ${newVal ? '已登录' : '未登录'}`);
+        // 可根据需求添加额外逻辑
+      }
+    });
+
+    // 注册按钮点击处理
+    const handleClick = () => {
       console.log('Router link clicked');
-    },
+    };
+
+    return {
+      keyword,
+      isAuthenticated,
+      userInfo,
+      isAdmin,
+      logout,
+      search,
+      handleClick,
+    };
   },
 };
 </script>
