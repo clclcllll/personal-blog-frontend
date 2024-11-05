@@ -53,6 +53,8 @@ export default {
         params.category = route.params.id;
       } else if (route.name === 'Tag') {
         params.tag = route.params.id;
+      }else if(route.name === 'Search'){
+        params.keyword = route.query.q;
       }
 
       store.dispatch('article/fetchArticles', params); // 调用 fetchArticles action
@@ -68,7 +70,7 @@ export default {
     });
 
     watch(
-        () => [route.name, route.params.id],
+        () => [route.name, route.params.id,route.query.q],
         () => {
           loadArticles();
         }

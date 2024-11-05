@@ -39,7 +39,7 @@
       <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll">
         全部展开
       </button>
-      <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length > 1" @click="collapse">
+      <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length >=1" @click="collapse">
         收起
       </button>
     </div>
