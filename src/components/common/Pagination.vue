@@ -1,13 +1,32 @@
 <!-- src/components/common/Pagination.vue -->
 
 <template>
-  <div class="pagination" v-if="totalPages >= 1">
-    <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">
-      上一页
+  <div class="pagination flex items-center justify-center space-x-4">
+    <!-- 上一页按钮 -->
+    <button
+        :disabled="currentPage === 1"
+        @click="changePage(currentPage - 1)"
+        class="p-2 rounded-full bg-gray-100 hover:bg-blue-100 disabled:opacity-50 transition duration-300 ease-in-out"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
     </button>
-    <span>第 {{ currentPage }} 页，共 {{ totalPages }} 页</span>
-    <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">
-      下一页
+
+    <!-- 页码显示 -->
+    <span class="text-gray-600 font-medium">
+      {{ currentPage }} / {{ totalPages }}
+    </span>
+
+    <!-- 下一页按钮 -->
+    <button
+        :disabled="currentPage === totalPages"
+        @click="changePage(currentPage + 1)"
+        class="p-2 rounded-full bg-gray-100 hover:bg-blue-100 disabled:opacity-50 transition duration-300 ease-in-out"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
     </button>
   </div>
 </template>
@@ -38,16 +57,6 @@ export default {
 
 <style scoped>
 .pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 20px 0;
-}
-.pagination button {
-  padding: 5px 10px;
-  margin: 0 10px;
-}
-.pagination span {
-  margin: 0 10px;
 }
 </style>
