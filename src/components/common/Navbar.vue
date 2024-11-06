@@ -47,32 +47,37 @@
 
       <!-- 用户操作 -->
       <div class="flex items-center space-x-4">
+
+        <!-- 导出部分注销图标的样式 -->
         <template v-if="isAuthenticated">
           <span v-if="userInfo?.username" class="text-gray-600">欢迎，{{ userInfo.username }}</span>
+          <!-- 注销图标按钮 -->
           <button
               @click="logout"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+              class="text-gray-600 hover:text-red-600 transition duration-300 ease-in-out focus:outline-none"
           >
-            注销
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2h-3a2 2 0 01-2-2V7a2 2 0 012-2h3a2 2 0 012 2v1" />
+            </svg>
+          </button>
+
+        </template>
+
+
+        <template v-else>
+          <!-- 账户图标触发模态窗口 -->
+          <button @click="openAuthModal('login')" class="text-gray-600 hover:text-blue-600 transition duration-300 ease-in-out focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
           </button>
         </template>
-        <template v-else>
-          <router-link
-              to="/login"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
-          >
-            登录
-          </router-link>
-          <router-link
-              to="/register"
-              @click.native="handleClick"
-              class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-md hover:bg-green-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
-            注册
-          </router-link>
-        </template>
+
       </div>
     </div>
+
+    <!-- 引入 AuthModal 模态窗口 -->
+    <AuthModal v-if="showAuthModal" :initial-mode="authModalMode" @close="showAuthModal = false" />
   </nav>
 </template>
 
@@ -80,10 +85,15 @@
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import AuthModal from '@/components/users/AuthModal.vue';
 
 const store = useStore();
 const router = useRouter();
 const keyword = ref('');
+
+const showAuthModal = ref(false); // 控制 AuthModal 的显示状态
+const authModalMode = ref('login'); // 控制 AuthModal 的初始模式
+
 
 const navLinks = [
   { to: '/', text: '首页' },
@@ -115,6 +125,13 @@ const search = () => {
 const handleClick = () => {
   console.log('Router link clicked');
 };
+
+// 切换 AuthModal 的显示并设置模式
+const openAuthModal = (mode) => {
+  authModalMode.value = mode;
+  showAuthModal.value = true;
+};
+
 </script>
 
 <style scoped>

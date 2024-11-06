@@ -1,39 +1,46 @@
 <!-- src/components/users/LoginForm.vue -->
 
 <template>
-  <div class="login-form">
-    <h2>用户登录</h2>
-    <form @submit.prevent="onSubmit">
+  <div class="login-form bg-white shadow-md rounded-lg p-8 mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">用户登录</h2>
+    <form @submit.prevent="onSubmit" class="space-y-6">
       <div class="form-group">
-        <label for="email">邮箱地址</label>
+        <label for="email" class="block text-gray-600 font-medium mb-2">邮箱地址</label>
         <input
             type="email"
             id="email"
             v-model.trim="email"
             required
             placeholder="请输入邮箱地址"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
         />
       </div>
       <div class="form-group">
-        <label for="password">密码</label>
+        <label for="password" class="block text-gray-600 font-medium mb-2">密码</label>
         <input
             type="password"
             id="password"
             v-model.trim="password"
             required
             placeholder="请输入密码"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
         />
       </div>
-      <button type="submit" class="btn btn-primary">登录</button>
+      <button
+          type="submit"
+          class="w-full py-3 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        登录
+      </button>
     </form>
-    <p class="register-link">
-      还没有账户？<router-link to="/register">立即注册</router-link>
+    <p class="text-center mt-6 text-gray-600">
+      还没有账户？<router-link to="/register" class="text-blue-500 hover:underline">立即注册</router-link>
     </p>
   </div>
 </template>
 
 <script>
-import {mapActions, useStore} from 'vuex';
+import { mapActions, useStore } from 'vuex';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -45,18 +52,14 @@ export default {
 
     const { login } = mapActions('user', ['login']);
     const store = useStore();
-    const router = useRouter(); // 获取 router 实例
-
+    const router = useRouter();
 
     const onSubmit = async () => {
       try {
         await store.dispatch('user/login', { email: email.value, password: password.value });
-        // 登录成功，跳转到首页
-        await router.push({name: 'Home'}); // 使用 router.push 进行导航
+        await router.push({ name: 'Home' });
       } catch (error) {
-        // 处理登录失败的情况，显示错误消息
-        console.error("Login error:", error);
-        // 处理登录失败的情况，显示错误消息
+        console.error('Login error:', error);
         alert(error.response?.data?.error || '登录失败，请重试');
       }
     };
@@ -73,31 +76,6 @@ export default {
 <style scoped>
 .login-form {
   max-width: 400px;
-  margin: 50px auto;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 30px;
-}
-.form-group {
-  margin-bottom: 20px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-.form-group input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-.btn {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-}
-.register-link {
-  text-align: center;
-  margin-top: 20px;
+  margin-top: 80px;
 }
 </style>
