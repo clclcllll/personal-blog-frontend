@@ -1,15 +1,25 @@
 <!-- src/components/comments/CommentForm.vue -->
 
 <template>
-  <div class="comment-form">
+  <div class="comment-form mt-6">
     <textarea
         v-model="content"
         :placeholder="placeholder"
         rows="3"
+        class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out shadow-sm"
     ></textarea>
-    <button @click="submitComment">提交评论</button>
+    <div class="flex justify-end mt-2">
+      <button
+          @click="submitComment"
+          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-300"
+      >
+        提交评论
+      </button>
+    </div>
   </div>
 </template>
+
+
 
 <script>
 import {computed, ref} from 'vue';
@@ -88,19 +98,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.comment-form {
-  margin-top: 20px;
-}
-.comment-form textarea {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  resize: vertical;
-  margin-bottom: 10px;
-}
-.comment-form button {
-  padding: 8px 16px;
-}
-</style>

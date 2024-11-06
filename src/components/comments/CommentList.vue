@@ -1,9 +1,9 @@
 <!-- src/components/comments/CommentList.vue -->
 
 <template>
-  <div class="comment-section">
-    <h3>{{ total }} 条评论</h3>
-    <div class="comments">
+  <div class="comment-section my-6">
+    <h3 class="text-lg font-semibold mb-4">{{ total }} 条评论</h3>
+    <div class="comments space-y-4">
       <CommentItem
           v-for="comment in comments"
           :key="comment._id"
@@ -12,10 +12,12 @@
           @comment-added="onCommentAdded"
       />
     </div>
-    <Pagination :currentPage="page" :totalPages="pages" @page-changed="onPageChanged" />
-    <CommentForm :articleId="articleId" @comment-added="onCommentAdded" />
+    <Pagination :currentPage="page" :totalPages="pages" @page-changed="onPageChanged" class="mt-6" />
+    <CommentForm :articleId="articleId" @comment-added="onCommentAdded" class="mt-6" />
   </div>
 </template>
+
+
 
 <script>
 import { ref, onMounted, watch, computed } from 'vue';

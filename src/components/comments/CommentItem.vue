@@ -1,22 +1,42 @@
 <!-- src/components/comments/CommentItem.vue -->
-
 <template>
-  <div class="comment-item">
-    <div class="comment-header">
-      <span class="username">{{ comment.user.username }}</span>
-      <span class="date">{{ formatDate(comment.createdAt) }}</span>
+  <div class="comment-item pt-4 border-t border-gray-200 relative group">
+    <!-- 顶部信息（用户头像、名称和时间/位置） -->
+    <div class="flex items-start mb-2">
+      <img :src="`https://api.dicebear.com/6.x/pixel-art/svg?seed=${comment.user.username}`" class="w-10 h-10 rounded-full mr-3" alt="User avatar">
+
+      <div class="flex-1">
+        <div class="flex items-center justify-between">
+          <!-- 左侧：用户名和时间信息 -->
+          <div class="flex items-center text-gray-500">
+            <span class="font-semibold text-base text-gray-800 mr-2">{{ comment.user.username }}</span>
+
+            <!-- 回复对象 -->
+            <span v-if="replyToUsername" class="text-sm mr-2">
+              回复 <span class="text-blue-500">{{ replyToUsername }}</span>
+            </span>
+
+            <span class="text-xs text-gray-500">{{ formatDate(comment.createdAt) }}</span>
+          </div>
+
+          <!-- 右侧：回复图标按钮在同一水平线 -->
+          <button @click="showReply = !showReply" class="text-blue-500 ml-4">
+            <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1296db">
+              <path d="M511.3 925.8L408.8 758.7H192.2c-64.5 0-117-52.5-117-117V215.2c0-64.5 52.5-117 117-117h639.7c64.5 0 117 52.5 117 117v426.4c0 64.5-52.5 117-117 117H621.4L511.3 925.8zM192.2 145.7c-38.3 0-69.5 31.2-69.5 69.5v426.4c0 38.4 31.2 69.6 69.5 69.6h243.1l77.4 126.1 83.1-126.1h236c38.3 0 69.5-31.2 69.5-69.6V215.2c0-38.3-31.2-69.5-69.5-69.5H192.2z"></path>
+              <path d="M292.1 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
+              <path d="M512 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
+              <path d="M731.9 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 评论内容 -->
+        <div class="text-gray-700 text-base mt-1">
+          <p>{{ comment.content }}</p>
+        </div>
+      </div>
     </div>
-    <div class="comment-content">
-      <!-- 仅在回复二级或更深层评论时显示 -->
-      <p v-if="replyToUsername">{{ `回复 @${replyToUsername}` }}</p>
-      <p>{{ comment.content }}</p>
-    </div>
-    <!-- 回复按钮 -->
-    <div class="comment-actions">
-      <button @click="showReply = !showReply">
-        {{ showReply ? '取消回复' : '回复' }}
-      </button>
-    </div>
+
     <!-- 回复表单 -->
     <CommentForm
         v-if="showReply"
@@ -24,27 +44,30 @@
         :parentId="comment._id"
         :parentUsername="comment.user.username"
         @comment-added="onReplyAdded"
+        class="mt-4 ml-4"
     />
-    <!-- 子评论显示在同一层级 -->
-    <div class="replies" v-if="comment.replies && comment.replies.length">
+
+    <!-- 子评论，缩小间距 -->
+    <div class="border-l-2 border-gray-200 ml-4 mt-2 pl-4 space-y-2" v-if="comment.replies && comment.replies.length">
       <CommentItem
           v-for="reply in displayedReplies"
           :key="reply._id"
           :comment="reply"
           :replyToUsername="reply.replyToUsername"
           @comment-added="$emit('comment-added')"
-      /><!-- emit事件冒泡继续向父组件传递 -->
-      <!-- 按钮控制 -->
-      <button v-if="showInitial" @click="showLimited">展开</button>
-      <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll">
-        全部展开
-      </button>
-      <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length >=1" @click="collapse">
-        收起
-      </button>
+      />
+      <div class="flex space-x-2 mt-2 items-center">
+        <span class="w-6 border-t border-gray-200"></span>
+        <button v-if="showInitial" @click="showLimited" class="text-blue-500 text-sm">展开 {{ comment.replies.length }} 条回复</button>
+        <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll" class="text-blue-500 text-sm">全部展开</button>
+        <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length >= 1" @click="collapse" class="text-gray-500 text-sm">收起</button>
+      </div>
     </div>
   </div>
 </template>
+
+
+
 
 <script>
 import {ref, computed, watch} from 'vue';
@@ -122,38 +145,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.comment-item {
-  border-bottom: 1px solid #eee;
-  padding: 15px 0;
-}
-.comment-header {
-  font-size: 14px;
-  color: #666;
-}
-.username {
-  font-weight: bold;
-  margin-right: 10px;
-}
-.date {
-  color: #999;
-}
-.comment-content {
-  margin: 10px 0;
-}
-.comment-actions {
-  margin-bottom: 10px;
-}
-.replies {
-  margin-left: 20px;
-  border-left: 2px solid #eee;
-  padding-left: 10px;
-}
-.replies button {
-  background: none;
-  border: none;
-  color: #42b983;
-  cursor: pointer;
-  padding: 5px 0;
-}
-</style>
+
