@@ -156,7 +156,7 @@ const handleScroll = () => {
       scrollUpCount = 0;
     } else {
       scrollUpCount += 1;
-      if (scrollUpCount >= 10) {
+      if (scrollUpCount >= 15) {
         hideNav.value = false;
       }
     }

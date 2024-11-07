@@ -43,20 +43,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.categories-page {
-  max-width: 800px;
-  margin: 20px auto;
-}
-.categories-page h1 {
-  margin-bottom: 20px;
-}
-.categories-page ul {
-  list-style: none;
-  padding: 0;
-}
-.categories-page li {
-  margin-bottom: 10px;
-}
-</style>

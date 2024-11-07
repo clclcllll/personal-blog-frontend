@@ -1,7 +1,7 @@
 <!-- src/views/Archive.vue -->
 
 <template>
-  <div class="archive-page bg-gray-50 min-h-screen">
+  <div class="archive-page min-h-scree">
     <!-- 导航栏 -->
     <Navbar />
     <!-- 主体内容 -->
