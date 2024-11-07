@@ -3,7 +3,7 @@
   <div class="comment-item pt-4 border-t border-gray-200 relative group">
     <!-- 顶部信息（用户头像、名称和时间/位置） -->
     <div class="flex items-start mb-2">
-      <img :src="`https://api.dicebear.com/6.x/pixel-art/svg?seed=${comment.user.username}`" class="w-10 h-10 rounded-full mr-3" alt="User avatar">
+      <img :src="`https://api.dicebear.com/9.x/glass/svg?seed=${comment.user.username}`" class="w-10 h-10 rounded-full mr-3" alt="User avatar">
 
       <div class="flex-1">
         <div class="flex items-center justify-between">
@@ -12,21 +12,16 @@
             <span class="font-semibold text-base text-gray-800 mr-2">{{ comment.user.username }}</span>
 
             <!-- 回复对象 -->
-            <span v-if="replyToUsername" class="text-sm mr-2">
-              回复 <span class="text-blue-500">{{ replyToUsername }}</span>
+            <span v-if="replyToUsername" class="text-xs mr-2">
+              回复 <span class="text-blue-500 text-xs">{{ replyToUsername }}</span>
             </span>
 
-            <span class="text-xs text-gray-500">{{ formatDate(comment.createdAt) }}</span>
+            <span class="text-xs text-gray-500 ">{{ formatDate(comment.createdAt) }}</span>
           </div>
 
-          <!-- 右侧：回复图标按钮在同一水平线 -->
+          <!-- 右侧：Font Awesome 回复图标按钮 -->
           <button @click="showReply = !showReply" class="text-blue-500 ml-4">
-            <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#1296db">
-              <path d="M511.3 925.8L408.8 758.7H192.2c-64.5 0-117-52.5-117-117V215.2c0-64.5 52.5-117 117-117h639.7c64.5 0 117 52.5 117 117v426.4c0 64.5-52.5 117-117 117H621.4L511.3 925.8zM192.2 145.7c-38.3 0-69.5 31.2-69.5 69.5v426.4c0 38.4 31.2 69.6 69.5 69.6h243.1l77.4 126.1 83.1-126.1h236c38.3 0 69.5-31.2 69.5-69.6V215.2c0-38.3-31.2-69.5-69.5-69.5H192.2z"></path>
-              <path d="M292.1 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
-              <path d="M512 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
-              <path d="M731.9 435.1m-60 0a60 60 0 1 0 120 0 60 60 0 1 0-120 0Z"></path>
-            </svg>
+            <i :class="['fa-solid', 'fa-reply', showReply ? 'text-blue-500' : 'text-gray-400']"></i>
           </button>
         </div>
 
@@ -58,16 +53,13 @@
       />
       <div class="flex space-x-2 mt-2 items-center">
         <span class="w-6 border-t border-gray-200"></span>
-        <button v-if="showInitial" @click="showLimited" class="text-blue-500 text-sm">展开 {{ comment.replies.length }} 条回复</button>
-        <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll" class="text-blue-500 text-sm">全部展开</button>
-        <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length >= 1" @click="collapse" class="text-gray-500 text-sm">收起</button>
+        <button v-if="showInitial" @click="showLimited" class="text-gray-500 text-sm hover:text-blue-500 ">展开 {{ comment.replies.length }} 条回复</button>
+        <button v-if="showLimitedReplies && comment.replies.length > 3" @click="expandAll" class="text-gray-500 text-sm hover:text-blue-500">全部展开</button>
+        <button v-if="(!showInitial || showAllReplies || showLimitedReplies) && comment.replies.length >= 1" @click="collapse" class="text-gray-500 text-sm hover:text-blue-500">收起</button>
       </div>
     </div>
   </div>
 </template>
-
-
-
 
 <script>
 import {ref, computed, watch} from 'vue';
@@ -144,5 +136,3 @@ export default {
   },
 };
 </script>
-
-

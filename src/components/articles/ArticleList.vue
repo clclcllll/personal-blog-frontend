@@ -1,17 +1,17 @@
 <!-- src/components/articles/ArticleList.vue -->
 
 <template>
-  <div class="article-list">
+  <div class="article-list space-y-8 mt-8">
     <ArticleItem
         v-for="article in articles"
         :key="article._id"
         :article="article"
     />
-    <!-- 分页器 -->
     <Pagination
         :currentPage="currentPage"
         :totalPages="pages"
         @page-changed="onPageChanged"
+        class="mt-8"
     />
   </div>
 </template>
@@ -87,9 +87,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.article-list {
-  margin: 20px 0;
-}
-</style>

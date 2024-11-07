@@ -1,34 +1,75 @@
 <!-- src/components/articles/ArticleDetail.vue -->
-
 <template>
-  <div v-if="article && article.author" class="article-detail">
-    <h1>{{ article.title }}</h1>
-    <div class="meta">
-      <span>作者：{{ article.author.username }}</span>
-      <span>发布时间：{{ formatDate(article.createdAt) }}</span>
-      <span>
-        分类：
-        <router-link :to="{ name: 'Category', params: { id: article.category._id } }">
-          {{ article.category.name }}
-        </router-link>
-      </span>
-      <span>阅读：{{ article.views }} 次</span>
-    </div>
-    <div class="content" v-html="article.htmlContent"></div>
-    <div class="tags">
-      <span v-for="tag in article.tags" :key="tag._id" class="tag">
-        <router-link :to="{ name: 'Tag', params: { id: tag._id } }">{{ tag.name }}</router-link>
-      </span>
-    </div>
-    <div v-if="article && article._id" class="like-button">
-      <button @click="toggleLike">{{ liked ? '取消点赞' : '点赞' }}（{{ article.likes }}）</button>
+  <div class="max-w-5xl mx-auto flex mt-8 space-x-4">
+    <!-- 大纲 -->
+    <Outline :content="article.content" />
+
+    <div v-if="article && article.author" class="max-w-3xl mx-auto mt-8 space-y-6">
+
+      <!-- 标题 -->
+      <h1 class="text-3xl font-bold text-gray-800">{{ article.title }}</h1>
+
+      <!-- 作者、发布时间、阅读次数 -->
+      <div class="flex items-center space-x-6 text-gray-500 text-sm">
+        <span class="flex items-center gap-1">
+          <i class="fas fa-user"></i> <!-- 用户图标 -->
+          {{ article.author.username }}
+        </span>
+
+        <span class="flex items-center gap-1">
+          <i class="fas fa-clock"></i> <!-- 时间图标 -->
+          {{ formatDate(article.createdAt) }}
+        </span>
+
+        <span class="flex items-center gap-1">
+          <i class="fas fa-eye"></i> <!-- 阅读图标 -->
+          阅读：{{ article.views }} 次
+        </span>
+
+        <span v-if="article.category" class="flex items-center gap-1">
+          <i class="fas fa-folder"></i> <!-- 分类图标 -->
+          <router-link :to="{ name: 'Category', params: { id: article.category._id } }" class="hover:text-blue-500">
+            {{ article.category.name }}
+          </router-link>
+        </span>
+
+        <span v-if="article.tags && article.tags.length > 0" class="flex items-center gap-1">
+          <i class="fas fa-tag"></i> <!-- 标签图标 -->
+          <span class="flex gap-1">
+            <router-link v-for="tag in article.tags" :key="tag._id" :to="{ name: 'Tag', params: { id: tag._id } }" class="hover:text-blue-500">
+              {{ tag.name }}
+            </router-link>
+          </span>
+        </span>
+
+      </div>
+
+      <!-- 文章内容 -->
+      <!--使用tailwind的prose类美化格式-->
+      <!--使用 markdown-it md转 和 markdown-it-anchor 为每个标题生成 id -->
+      <div class="prose max-w-none" v-html="renderedHtmlContent"></div>
+
+      <!-- 点赞按钮 -->
+      <div class="flex items-center space-x-4 mt-4">
+        <button @click="toggleLike" class="text-gray-500 hover:text-blue-500 transition-transform transform hover:scale-110 flex items-center gap-1">
+          <i :class="liked ? 'fas fa-heart' : 'far fa-heart'"></i> <!-- 使用实心或空心的心形图标 -->
+          <span>{{ article.likes }}</span>
+        </button>
+      </div>
+
+      <!-- 评论列表 -->
+      <CommentList :articleId="article._id" />
+
     </div>
 
+    <div v-else class="text-center text-gray-500 mt-16">加载中...</div>
 
-    <CommentList :articleId="article._id" />
   </div>
-  <div v-else>加载中...</div>
+
+
+
 </template>
+
 
 
 <script>
@@ -38,10 +79,15 @@ import { useStore } from 'vuex';
 import { format } from 'date-fns';
 import CommentList from '@/components/comments/CommentList.vue';
 import { likeArticle, unlikeArticle } from '@/api/like';
+import Outline from "@/components/articles/Outline.vue";
+
+import MarkdownIt from 'markdown-it';
+import markdownItAnchor from 'markdown-it-anchor';
 
 export default {
   name: 'ArticleDetail',
   components: {
+    Outline,
     CommentList,
   },
   setup() {
@@ -52,6 +98,26 @@ export default {
     const liked = ref(false);
     // 使用计算属性绑定当前文章
     const article = computed(() => store.state.article.currentArticle);
+
+    // 初始化 markdown-it 和 markdown-it-anchor 插件
+    const markdownParser = new MarkdownIt({
+      html: true,  // 启用 HTML 标签
+      linkify: true, // 自动将 URL 转换为链接
+    }).use(markdownItAnchor, {
+      level: [1, 2, 3, 4, 5, 6], // 支持 h1 到 h6 级别标题
+      slugify: (s) =>
+          s.trim().toLowerCase().replace(/\s+/g, '-'), // 将标题内容生成 slug，用于 id
+      permalink: true, // 为每个标题生成锚点链接
+      permalinkSymbol: '#', // 锚点符号
+      permalinkClass: 'anchor-link', // 自定义类名以便于样式控制
+      permalinkBefore: false, // 锚点符号显示在标题前
+    });
+
+    // 使用计算属性将 Markdown 内容转换为 HTML
+    const renderedHtmlContent = computed(() => {
+      return article.value.content ? markdownParser.render(article.value.content) : '';
+    });
+
 
     const loadArticle = async () => {
       try {
@@ -122,46 +188,8 @@ export default {
       formatDate,
       liked,
       toggleLike,
+      renderedHtmlContent,
     };
   },
 };
 </script>
-
-<style scoped>
-.article-detail {
-  max-width: 800px;
-  margin: 20px auto;
-}
-.article-detail h1 {
-  margin-bottom: 20px;
-}
-.meta {
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 20px;
-}
-.meta span {
-  margin-right: 15px;
-}
-.content {
-  margin-bottom: 20px;
-}
-.tags {
-  margin-top: 20px;
-}
-.tag {
-  display: inline-block;
-  margin-right: 10px;
-}
-.tag a {
-  color: #42b983;
-  text-decoration: none;
-}
-.like-button {
-  margin: 20px 0;
-}
-.like-button button {
-  padding: 10px 20px;
-  font-size: 16px;
-}
-</style>

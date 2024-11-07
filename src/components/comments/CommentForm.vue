@@ -1,5 +1,4 @@
 <!-- src/components/comments/CommentForm.vue -->
-
 <template>
   <div class="comment-form mt-6">
     <textarea
@@ -11,14 +10,14 @@
     <div class="flex justify-end mt-2">
       <button
           @click="submitComment"
-          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-300"
+          class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-300 flex items-center gap-2"
       >
-        提交评论
+        <i class="fas fa-paper-plane"></i> <!-- 发送图标 -->
+        <span class="sr-only">提交评论</span> <!-- 隐藏的文字用于无障碍访问 -->
       </button>
     </div>
   </div>
 </template>
-
 
 
 <script>

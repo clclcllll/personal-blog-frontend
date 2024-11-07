@@ -1,5 +1,3 @@
-<!-- src/components/common/Button.vue -->
-
 <template>
   <button :class="buttonClass" @click="$emit('click')">
     <slot>按钮</slot>
@@ -17,7 +15,14 @@ export default {
   },
   computed: {
     buttonClass() {
-      return ['btn', `btn-${this.type}`];
+      const baseClasses = 'px-4 py-2 rounded cursor-pointer font-semibold transition-colors duration-200';
+      const typeClasses = {
+        default: 'bg-gray-300 text-gray-700 hover:bg-gray-400',
+        primary: 'bg-primary text-white hover:bg-blue-700',
+        danger: 'bg-red-500 text-white hover:bg-red-600',
+      };
+
+      return `${baseClasses} ${typeClasses[this.type] || typeClasses.default}`;
     },
   },
   emits: ['click'],
@@ -25,22 +30,5 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-  padding: 5px 15px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.btn-default {
-  background-color: #e0e0e0;
-  color: #333;
-}
-.btn-primary {
-  background-color: #42b983;
-  color: #fff;
-}
-.btn-danger {
-  background-color: #ff4d4f;
-  color: #fff;
-}
+/* 如果有额外的自定义样式需求，可以在此处进行补充 */
 </style>

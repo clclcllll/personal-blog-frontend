@@ -1,24 +1,58 @@
 <!-- src/components/articles/ArticleItem.vue -->
 
 <template>
-  <div class="article-item">
-    <h2>
-      <router-link :to="{ name: 'ArticleDetail', params: { id: article._id } }">
+  <div class="border-b pb-8">
+    <!-- 第一行：文章标题 -->
+    <h2 class="text-2xl font-semibold">
+      <router-link
+          :to="{ name: 'ArticleDetail', params: { id: article._id } }"
+          class="text-gray-800 hover:text-blue-500 transition-transform duration-300 transform hover:scale-105"
+      >
         {{ article.title }}
       </router-link>
     </h2>
-    <div class="meta">
-      <span>作者：{{ article.author.username }}</span>
-      <span>发布时间：{{ formatDate(article.createdAt) }}</span>
-      <span>分类：<router-link :to="{ name: 'Category', params: { id: article.category._id } }">{{ article.category.name }}</router-link></span>
-      <span>阅读：{{ article.views }} 次</span>
-    </div>
-    <p class="summary">{{ article.summary }}</p>
-    <div class="tags">
-      <span v-for="tag in article.tags" :key="tag._id" class="tag">
-        <router-link :to="{ name: 'Tag', params: { id: tag._id } }">{{ tag.name }}</router-link>
+    <!-- 第二行：图标 + 作者、发布时间、分类、标签 -->
+    <div class="text-gray-600 text-sm flex flex-wrap gap-4 mt-2 items-center">
+      <!-- 作者图标和名字 -->
+      <span class="flex items-center gap-1">
+        <i class="fas fa-user"></i> <!-- 用户图标 -->
+        {{ article.author.username }}
+      </span>
+
+      <!-- 时间图标和发布时间 -->
+      <span class="flex items-center gap-1">
+        <i class="fas fa-clock"></i> <!-- 时间图标 -->
+        {{ formatDate(article.createdAt) }}
+      </span>
+
+      <!-- 阅读次数 -->
+      <span class="flex items-center gap-1">
+        <i class="fas fa-eye"></i> <!-- 阅读图标 -->
+        阅读：{{ article.views }} 次
+      </span>
+
+      <!-- 分类图标和分类名称（如果有） -->
+      <span v-if="article.category" class="flex items-center gap-1">
+        <i class="fas fa-folder"></i> <!-- 文件夹图标 -->
+        <router-link :to="{ name: 'Category', params: { id: article.category._id } }" class="hover:text-blue-500">
+          {{ article.category.name }}
+        </router-link>
+      </span>
+
+      <!-- 标签图标和标签列表（如果有） -->
+      <span v-if="article.tags && article.tags.length > 0" class="flex items-center gap-1">
+        <i class="fas fa-tag"></i> <!-- 标签图标 -->
+        <span class="flex gap-1">
+          <router-link v-for="tag in article.tags" :key="tag._id" :to="{ name: 'Tag', params: { id: tag._id } }" class="hover:text-blue-500">
+            {{ tag.name }}
+          </router-link>
+        </span>
       </span>
     </div>
+
+    <!-- 文章摘要 -->
+    <p class="text-gray-700 mt-4">{{ article.summary }}</p>
+
   </div>
 </template>
 
@@ -40,35 +74,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.article-item {
-  border-bottom: 1px solid #eee;
-  padding: 20px 0;
-}
-.article-item h2 {
-  margin: 0;
-}
-.meta {
-  font-size: 14px;
-  color: #999;
-}
-.meta span {
-  margin-right: 15px;
-}
-.summary {
-  margin: 15px 0;
-  color: #555;
-}
-.tags {
-  margin-top: 10px;
-}
-.tag {
-  display: inline-block;
-  margin-right: 10px;
-}
-.tag a {
-  color: #42b983;
-  text-decoration: none;
-}
-</style>
