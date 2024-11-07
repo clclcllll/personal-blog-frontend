@@ -59,7 +59,8 @@ export default {
 
     const submitComment = async () => {
       if (!store.getters['user/isAuthenticated']) {
-        ElMessage.warning('请先登录再发表评论');
+        //ElMessage.warning('请先登录再发表评论');
+        alert('请先登录再发表评论');
         //router.push({ name: 'Login' });
         return;
       }
