@@ -43,20 +43,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.tags-page {
-  max-width: 800px;
-  margin: 20px auto;
-}
-.tags-page h1 {
-  margin-bottom: 20px;
-}
-.tags-page ul {
-  list-style: none;
-  padding: 0;
-}
-.tags-page li {
-  margin-bottom: 10px;
-}
-</style>

@@ -1,30 +1,58 @@
 <template>
   <nav
-      class="bg-white shadow-md fixed top-0 w-full z-50 transition-transform duration-500 ease-in-out"
-      :class="{ '-translate-y-full': hideNav }"
+      class="shadow-md fixed top-0 w-full z-50 transition-transform duration-480 ease-in-out"
+      :class="[
+        hideNav ? '-translate-y-full' : 'translate-y-0',
+        isHomePage && atTop ? 'bg-gradient-to-br from-black-900 to-blue-100 text-white bg-opacity-70' : 'bg-white text-gray-800'
+      ]"
   >
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
       <!-- 网站 Logo -->
-      <router-link to="/" class="text-2xl font-bold text-gray-800 hover:text-gray-600 transition-colors duration-300 transform hover:scale-105">
+      <router-link to="/" class="text-2xl font-bold hover:text-blue-500 transition-colors duration-300 transform hover:scale-105">
         My Blog
       </router-link>
 
       <!-- 导航链接 -->
       <ul class="flex space-x-2 items-center">
         <li v-for="link in navLinks" :key="link.to">
-          <router-link :to="link.to" class="text-gray-600 hover:text-blue-600 transition-colors duration-300 relative group px-4 py-2 no-underline">
-            <span class="absolute inset-0 bg-blue-100 rounded-full transform scale-0 transition-transform duration-300 group-hover:scale-100"></span>
+          <router-link
+              :to="link.to"
+              :class="[
+        'transition-colors duration-300 relative group px-4 py-2 no-underline',
+        isHomePage && atTop ? 'hover:text-white' : 'hover:text-white'
+      ]"
+          >
+      <span
+          :class="[
+          'absolute inset-0 rounded-full transform scale-0 transition-transform duration-50 group-hover:scale-100',
+          isHomePage && atTop ? 'bg-blue-400 bg-opacity-30' : 'bg-blue-500'
+        ]"
+      ></span>
             <span class="relative z-10">{{ link.text }}</span>
           </router-link>
         </li>
+
         <!-- 管理员链接 -->
         <li v-if="isAdmin">
-          <router-link to="/admin" class="text-gray-600 hover:text-blue-600 transition-colors duration-300 relative group px-4 py-2 no-underline">
-            <span class="absolute inset-0 bg-blue-100 rounded-full transform scale-0 transition-transform duration-300 group-hover:scale-100"></span>
+          <router-link
+              to="/admin"
+              :class="[
+        'transition-colors duration-300 relative group px-4 py-2 no-underline',
+        isHomePage && atTop ? 'hover:text-white' : 'hover:text-white'
+      ]"
+          >
+      <span
+          :class="[
+          'absolute inset-0 rounded-full transform scale-0 transition-transform duration-300 group-hover:scale-100',
+          isHomePage && atTop ? 'bg-blue-400 bg-opacity-30' : 'bg-blue-500'
+        ]"
+      ></span>
             <span class="relative z-10">管理后台</span>
           </router-link>
         </li>
       </ul>
+
+
 
       <!-- 搜索框 -->
       <div class="flex items-center relative">
@@ -32,18 +60,24 @@
           <input
               type="text"
               v-model="keyword"
-              placeholder="搜索..."
+              placeholder="搜索"
               @keyup.enter="search"
-              class="w-64 pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"
+              :class="[
+          'w-64 pl-4 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-300 ease-in-out',
+          isHomePage && atTop ? 'text-xs bg-gray-800 bg-opacity-25 text-white-200 border-gray-600 focus:ring-blue-400' : 'bg-white text-gray-700 border-gray-300 focus:ring-blue-500'
+        ]"
           />
           <button
               @click="search"
-              class="absolute right-0 top-0 mt-0.5 mr-2 p-2 text-gray-600 hover:text-blue-500 transition-colors duration-300 ease-in-out focus:outline-none"
+              :class="isHomePage && atTop ? 'text-gray-300 hover:text-blue-400' : 'text-gray-600 hover:text-blue-500'"
+              class="absolute right-0 top-0 mt-0.5 mr-2 p-2 transition-colors duration-300 ease-in-out focus:outline-none"
           >
-            <i class="fas fa-search"></i> <!-- 替换为 Font Awesome 搜索图标 -->
+            <i class="fas fa-search"></i> <!-- Font Awesome 搜索图标 -->
           </button>
         </div>
       </div>
+
+
 
       <!-- 用户操作 -->
       <div class="flex items-center space-x-4">
@@ -51,21 +85,21 @@
           <!-- 头像和用户名 -->
           <div class="flex items-center space-x-2">
             <img :src="`https://api.dicebear.com/9.x/glass/svg?seed=${userInfo.username}`" class="w-8 h-8 rounded-full" alt="User avatar">
-            <span class="text-gray-600">{{ userInfo.username }}</span>
+            <span>{{ userInfo.username }}</span>
           </div>
           <!-- 注销图标按钮 -->
           <button
               @click="logout"
-              class="text-gray-600 hover:text-red-600 transition duration-300 ease-in-out focus:outline-none"
+              class="hover:text-red-600 transition duration-300 ease-in-out focus:outline-none"
           >
-            <i class="fas fa-sign-out-alt"></i> <!-- 替换为 Font Awesome 注销图标 -->
+            <i class="fas fa-sign-out-alt"></i>
           </button>
         </template>
 
         <template v-else>
           <!-- 账户图标触发模态窗口 -->
-          <button @click="openAuthModal('login')" class="text-gray-600 hover:text-blue-600 transition duration-300 ease-in-out focus:outline-none">
-            <i class="fas fa-user"></i> <!-- 替换为 Font Awesome 用户图标 -->
+          <button @click="openAuthModal('login')" class="hover:text-blue-600 transition duration-300 ease-in-out focus:outline-none">
+            <i class="fas fa-user"></i>
           </button>
         </template>
       </div>
@@ -75,6 +109,7 @@
     <AuthModal v-if="showAuthModal" :initial-mode="authModalMode" @close="showAuthModal = false" />
   </nav>
 </template>
+
 
 <script setup>
 import {ref, computed, onMounted, onBeforeUnmount} from 'vue';
@@ -105,19 +140,25 @@ let lastScroll = window.scrollY;
 const hideNav = ref(false); // 控制导航栏显示状态
 let scrollUpCount = 0;
 
+const atTop = ref(true);
+const isHomePage = computed(() => router.currentRoute.value.name === 'Home');
 const handleScroll = () => {
   const currentScroll = window.scrollY;
 
   if (currentScroll === 0) {
-    hideNav.value = false; // 页面滚动到顶部时显示导航栏
+    hideNav.value = false;
     scrollUpCount = 0;
-  } else if (currentScroll > lastScroll) {
-    hideNav.value = true; // 向下滚动时隐藏导航栏
-    scrollUpCount = 0; // 重置向上滚动计数
+    atTop.value = true; // 页面在顶部
   } else {
-    scrollUpCount += 1;
-    if (scrollUpCount >= 2) {
-      hideNav.value = false; // 向上滚动两次时显示导航栏
+    atTop.value = false;
+    if (currentScroll > lastScroll) {
+      hideNav.value = true; // 向下滚动时隐藏导航栏
+      scrollUpCount = 0;
+    } else {
+      scrollUpCount += 1;
+      if (scrollUpCount >= 10) {
+        hideNav.value = false;
+      }
     }
   }
   lastScroll = currentScroll;
