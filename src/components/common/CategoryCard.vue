@@ -12,13 +12,20 @@
       >
         <router-link
             :to="{ name: 'Categories', query: { selectedCategory: category._id } }"
-            class="flex items-center justify-between p-2 transition-colors duration-300 hover:bg-blue-500 hover:text-white"
+            class="flex items-center justify-between p-2 transition-colors duration-300 hover:bg-blue-500 hover:text-white group rounded-lg shadow-sm"
         >
-          <span class="group-hover:text-white">{{ category.name }}</span>
-          <span class="bg-blue-600 text-white rounded-full px-3 py-1 text-xs group-hover:bg-blue-700">
-            {{ category.count }}
+          <!-- 分类名称 -->
+          <span class="text-gray-700 group-hover:text-white font-medium">
+            {{ category.name }}
+          </span>
+
+          <!-- 数量标签 -->
+          <span class="bg-blue-500 text-white rounded-full px-3 py-0.5 text-xs font-bold ml-2 shadow-md transition-colors duration-300 group-hover:bg-white group-hover:text-blue-500 flex items-center">
+             {{ category.count }}
           </span>
         </router-link>
+
+
       </li>
     </ul>
   </div>

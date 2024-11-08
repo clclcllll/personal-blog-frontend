@@ -8,7 +8,7 @@
     <!-- 标签部分 -->
     <div class="container mx-auto max-w-screen-lg px-4 py-12 mt-16">
       <h2 class="text-4xl font-bold text-gray-800 mb-8 flex items-center">
-        <i class="fas fa-tags text-blue-500 mr-2"></i> 标签列表
+        <i class="fas fa-tags mr-2"></i> 标签列表
       </h2>
 
       <!-- 标签选择区域 -->

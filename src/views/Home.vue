@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
 import Navbar from '@/components/common/Navbar.vue';
 import Footer from '@/components/common/Footer.vue';
 import ArticleList from '@/components/articles/ArticleList.vue';

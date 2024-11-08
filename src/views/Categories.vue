@@ -1,12 +1,12 @@
 <!-- src/views/Categories.vue -->
 
 <template>
-  <Navbar />
   <div class="categories-page min-h-screen">
+    <Navbar />
     <!-- 分类标题 -->
     <div class="container mx-auto max-w-screen-lg px-4 py-12 mt-16">
       <h2 class="text-4xl font-bold text-gray-800 mb-8 flex items-center">
-        <i class="fas fa-folder text-blue-500 mr-2"></i> 分类列表
+        <i class="fas fa-folder mr-2"></i> 分类列表
       </h2>
 
       <!-- 分类选择区域 -->

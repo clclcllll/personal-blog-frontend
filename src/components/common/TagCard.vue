@@ -9,11 +9,17 @@
           v-for="tag in tags"
           :key="tag._id"
           @click="navigateToTagsPage(tag._id)"
-          class="px-3 py-1 border border-gray-300 rounded-full text-gray-700 text-sm transition-colors duration-300 hover:bg-blue-500 hover:text-white"
+          class="text-gray-700 text-sm transition-colors duration-300 hover:text-blue-500 flex items-center"
       >
-        {{ tag.name }}
+        <!-- 标签名，前面带 # -->
+        <span><i class="fas fa-hashtag mr-1"></i>{{ tag.name }}</span>
+        <!-- 数量标签，带图标 -->
+        <span class="ml-2 flex items-center bg-blue-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow-md transition-colors duration-300">
+          {{ tag.count }}
+        </span>
       </button>
     </div>
+
   </div>
 </template>
 
