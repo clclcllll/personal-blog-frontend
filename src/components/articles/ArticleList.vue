@@ -29,7 +29,17 @@ export default {
     ArticleItem,
     Pagination,
   },
-  setup() {
+  props: {
+    selectedTags: {
+      type: Array,
+      default: () => [],
+    },
+    selectedCategory: {
+      type: String,
+      default: null,
+    },
+  },
+  setup(props) {
     const store = useStore(); // 使用 useStore() 获取 store 实例
     const route = useRoute(); // 使用 useRoute() 获取当前路由信息
 
@@ -49,12 +59,15 @@ export default {
         limit: 10,
       };
 
-      if (route.name === 'Category') {
-        params.category = route.params.id;
-      } else if (route.name === 'Tag') {
-        params.tag = route.params.id;
-      }else if(route.name === 'Search'){
-        params.keyword = route.query.q;
+      //根据params筛选
+      if (props.selectedTags.length > 0) {
+        params.tags = props.selectedTags; // 传递标签筛选参数
+      }
+      if (props.selectedCategory) {
+        params.category = props.selectedCategory; // 分类筛选参数
+      }
+      if (route.name === 'Search' && route.query.q) {
+        params.keyword = route.query.q; // 传递搜索关键词
       }
 
       store.dispatch('article/fetchArticles', params); // 调用 fetchArticles action
@@ -70,10 +83,11 @@ export default {
     });
 
     watch(
-        () => [route.name, route.params.id,route.query.q],
+        () => [route.name, route.query.q, props.selectedTags,props.selectedCategory],
         () => {
-          loadArticles();
-        }
+          loadArticles(1);
+        },
+        { deep: true } // 深度监听以捕获数组变化
     );
 
     return {

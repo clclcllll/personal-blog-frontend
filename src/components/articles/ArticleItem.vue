@@ -31,23 +31,29 @@
         阅读：{{ article.views }} 次
       </span>
 
-      <!-- 分类图标和分类名称（如果有） -->
+      <!-- 分类名称跳转，改为查询形式 -->
       <span v-if="article.category" class="flex items-center gap-1">
-        <i class="fas fa-folder"></i> <!-- 文件夹图标 -->
-        <router-link :to="{ name: 'Category', params: { id: article.category._id } }" class="hover:text-blue-500">
+        <i class="fas fa-folder"></i>
+        <router-link :to="{ name: 'Categories', query: { selectedCategory: article.category._id } }" class="hover:text-blue-500">
           {{ article.category.name }}
         </router-link>
       </span>
 
-      <!-- 标签图标和标签列表（如果有） -->
+      <!-- 标签列表跳转，改为查询形式 -->
       <span v-if="article.tags && article.tags.length > 0" class="flex items-center gap-1">
-        <i class="fas fa-tag"></i> <!-- 标签图标 -->
+        <i class="fas fa-tag"></i>
         <span class="flex gap-1">
-          <router-link v-for="tag in article.tags" :key="tag._id" :to="{ name: 'Tag', params: { id: tag._id } }" class="hover:text-blue-500">
+          <router-link
+              v-for="tag in article.tags"
+              :key="tag._id"
+              :to="{ name: 'Tags', query: { selectedTag: tag._id } }"
+              class="hover:text-blue-500"
+          >
             {{ tag.name }}
           </router-link>
         </span>
       </span>
+
     </div>
 
     <!-- 文章摘要 -->

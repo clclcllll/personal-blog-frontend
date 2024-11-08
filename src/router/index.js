@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '@/store';
 
 // 定义路由规则，使用懒加载
 const routes = [
@@ -25,21 +24,9 @@ const routes = [
         component: () => import('@/views/Categories.vue'),
     },
     {
-        path: '/category/:id',
-        name: 'Category',
-        component: () => import('@/views/Category.vue'),
-        props: true,
-    },
-    {
         path: '/tags',
         name: 'Tags',
         component: () => import('@/views/Tags.vue'),
-    },
-    {
-        path: '/tag/:id',
-        name: 'Tag',
-        component: () => import('@/views/Tag.vue'),
-        props: true,
     },
     {
         path: '/archive',

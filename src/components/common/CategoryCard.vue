@@ -11,7 +11,7 @@
           class="border border-gray-300 rounded-lg overflow-hidden group"
       >
         <router-link
-            :to="{ name: 'Category', params: { id: category._id } }"
+            :to="{ name: 'Categories', query: { selectedCategory: category._id } }"
             class="flex items-center justify-between p-2 transition-colors duration-300 hover:bg-blue-500 hover:text-white"
         >
           <span class="group-hover:text-white">{{ category.name }}</span>
