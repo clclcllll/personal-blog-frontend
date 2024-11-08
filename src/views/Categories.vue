@@ -1,3 +1,5 @@
+<!-- src/views/Categories.vue -->
+
 <template>
   <Navbar />
   <div class="categories-page min-h-screen">
@@ -9,13 +11,6 @@
 
       <!-- 分类选择区域 -->
       <ul class="flex flex-wrap gap-2 mb-8">
-        <!-- “全部”按钮 -->
-        <button
-            @click="selectCategory(null)"
-            class="px-3 py-1 rounded-full border border-gray-300 text-gray-700 transition-colors duration-300 hover:bg-blue-500 hover:text-white"
-            :class="{ 'bg-blue-500 text-white': selectedCategory === null }"
-        > 全部
-        </button>
 
         <button
             v-for="category in categories"
@@ -32,7 +27,7 @@
       <ArticleList :selectedCategory="selectedCategory" />
     </div>
   </div>
-  <Footer />
+
 </template>
 
 <script>
@@ -70,7 +65,7 @@ export default {
 
     // 切换分类选中状态
     const selectCategory = (categoryId) => {
-      selectedCategory.value = categoryId;
+      selectedCategory.value = selectedCategory.value === categoryId ? null : categoryId;//如果当前选中的分类和点击的分类相同，则取消选中
     };
 
     onMounted(() => {

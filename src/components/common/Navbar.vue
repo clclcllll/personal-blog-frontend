@@ -1,3 +1,4 @@
+<!--src/components/common/Navbar.vue-->
 <template>
   <nav
       class="shadow-md fixed top-0 w-full z-50 transition-transform duration-480 ease-in-out"

@@ -39,18 +39,6 @@ const routes = [
         component: () => import('@/views/Search.vue'),
     },
     {
-        path: '/login',
-        name: 'Login',
-        component: () => import('@/views/Login.vue'),
-        meta: { requiresGuest: true },
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () => import('@/views/Register.vue'),
-        meta: { requiresGuest: true },
-    },
-    {
         path: '/admin',
         name: 'Admin',
         component: () => import('@/views/Admin.vue'),
