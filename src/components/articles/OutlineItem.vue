@@ -5,7 +5,7 @@
         :class="{'font-semibold text-blue-500': activeId === item.id}"
         @click="toggleCollapse"
     >
-      <div class="w-4 flex-shrink-0 mr-1">
+      <div class="w-4 flex-shrink-0">
         <i
             v-if="item.children && item.children.length"
             :class="[
@@ -18,7 +18,6 @@
       <span
           @click.stop="scrollToSection"
           class="text-sm text-gray-600 hover:text-blue-500 transition-colors"
-          :style="{ paddingLeft: `${(item.level - 1) * 0.5}rem` }"
       >
         {{ item.text }}
       </span>

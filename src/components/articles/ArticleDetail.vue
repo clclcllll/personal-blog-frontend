@@ -1,6 +1,6 @@
 <!-- src/components/articles/ArticleDetail.vue -->
 <template>
-  <div class="max-w-5xl mx-auto flex mt-16">
+  <div class="max-w-5xl mx-auto flex mt-20">
     <!-- 大纲 -->
     <!-- 大纲：固定在内容的左边并偏移 -->
     <!-- 大纲 -->
@@ -66,7 +66,9 @@
 
       <!-- 点赞按钮 -->
       <div class="flex items-center space-x-4 mt-4">
-        <button @click="toggleLike" class="text-gray-500 hover:text-blue-500 transition-transform transform hover:scale-110 flex items-center gap-1">
+        <button @click="toggleLike" class="hover:text-blue-500 transition-transform transform hover:scale-110 flex items-center gap-1"
+            :class="liked ? 'text-blue-500' : 'text-gray-500'"
+        >
           <i :class="liked ? 'fas fa-heart' : 'far fa-heart'"></i> <!-- 使用实心或空心的心形图标 -->
           <span>{{ article.likes }}</span>
         </button>
