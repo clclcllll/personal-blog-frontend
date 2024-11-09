@@ -5,19 +5,23 @@
       <i :class="`fas ${iconClass} text-${iconColor} mr-2`"></i>
       {{ title }}
     </h2>
+
     <div v-if="stats" class="grid grid-cols-2 gap-4">
       <div class="text-center" v-for="(stat, index) in stats" :key="index">
         <div class="text-3xl font-bold">{{ stat.value }}</div>
         <div class="text-sm">{{ stat.label }}</div>
       </div>
     </div>
+
     <div v-else-if="content" class="text-gray-600">{{ content }}</div>
+
     <div v-else-if="techStack" class="grid grid-cols-3 gap-4">
       <div v-for="(tech, index) in techStack" :key="index" class="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
         <i :class="tech.icon" class="text-2xl"></i>
         <span class="text-xs mt-1">{{ tech.label }}</span>
       </div>
     </div>
+
     <div v-else-if="personality" class="flex items-center gap-3">
       <span class="text-2xl font-bold text-blue-600">{{ personality.type }}</span>
       <span class="text-gray-600">{{ personality.description }}</span>

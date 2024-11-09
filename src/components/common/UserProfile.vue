@@ -1,16 +1,16 @@
 <!-- src/components/UserProfile.vue -->
 <template>
-  <div class="relative w-full max-w-3xl mt-12 px-4 flex items-center justify-center">
+  <div class="relative w-full max-w-3xl px-4 flex items-center justify-center">
     <!-- Left Tags -->
     <div class="flex flex-col gap-2 mr-8">
       <span class="tag-float-left tag-1 px-3 py-1.5 bg-blue-500/10 text-blue-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-blue-500/15 transition-all">
-        <i class="fas fa-laptop-code mr-1.5 text-blue-500"></i>数码科技爱好者
+        <i class="fas fa-user-astronaut mr-1.5 text-blue-500"></i>i人
       </span>
       <span class="tag-float-left tag-2 px-3 py-1.5 bg-green-500/10 text-green-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-green-500/15 transition-all">
-        <i class="fas fa-share-alt mr-1.5 text-green-500"></i>分享与热心帮助
+        <i class="fas fa-hiking mr-1.5 text-green-500"></i>行动派
       </span>
       <span class="tag-float-left tag-3 px-3 py-1.5 bg-yellow-500/10 text-yellow-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-yellow-500/15 transition-all">
-        <i class="fas fa-home mr-1.5 text-yellow-500"></i>智能家居小能手
+        <i class="fas fa-code mr-1.5 text-yellow-500"></i>全栈CV工程师
       </span>
     </div>
 
@@ -26,13 +26,13 @@
     <!-- Right Tags -->
     <div class="flex flex-col gap-2 ml-8">
       <span class="tag-float-right tag-1 px-3 py-1.5 bg-purple-500/10 text-purple-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-purple-500/15 transition-all">
-        <i class="fas fa-running mr-1.5 text-purple-500"></i>脚踏实地行动派
+        <i class="fas fa-leaf mr-1.5 text-purple-500"></i>优雅强迫症
       </span>
       <span class="tag-float-right tag-2 px-3 py-1.5 bg-red-500/10 text-red-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-red-500/15 transition-all">
-        <i class="fas fa-users mr-1.5 text-red-500"></i>团队小组发动机
+        <i class="fas fa-map-marker-alt mr-1.5 text-red-500"></i>旅游
       </span>
       <span class="tag-float-right tag-3 px-3 py-1.5 bg-pink-500/10 text-pink-700 rounded-full text-xs inline-flex items-center backdrop-blur-sm shadow-sm hover:bg-pink-500/15 transition-all">
-        <i class="fas fa-heart-broken mr-1.5 text-pink-500"></i>社交人狠话不多
+        <i class="fas fa-star mr-1.5 text-pink-500"></i>狮子座
       </span>
     </div>
   </div>
