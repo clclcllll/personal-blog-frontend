@@ -42,29 +42,13 @@ service.interceptors.response.use(
         }
     },
     (error) => {
-        // 处理响应错误
-        if (error.response) {
-            const { status, data } = error.response;
-            switch (status) {
-                case 401:
-                    ElMessage.error('未授权，请登录');
-                    // 可以执行登出操作，清除令牌，重定向到登录页
-                    break;
-                case 403:
-                    ElMessage.error('拒绝访问');
-                    break;
-                case 404:
-                    ElMessage.error('请求地址出错');
-                    break;
-                case 500:
-                    ElMessage.error('服务器内部错误');
-                    break;
-                default:
-                    ElMessage.error(data.message || '请求失败');
-            }
-        } else {
-            ElMessage.error(error.message || '网络错误');
-        }
+
+        // 打印完整的 error 对象来分析其结构
+        console.log('Axios Error:', error);
+        // 确保正确获取 data.error 中的错误信息
+        const errorMessage = error.response?.data?.error || '请求失败，请重试';
+        alert(errorMessage)
+        // 将错误抛出，便于进一步处理
         return Promise.reject(error);
     }
 );

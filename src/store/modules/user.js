@@ -1,6 +1,6 @@
 // src/store/modules/user.js
 
-import { login, getUserProfile } from '@/api/user'
+import { login, register,getUserProfile } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
@@ -32,6 +32,15 @@ const actions = {
             commit('SET_TOKEN', token)
             setToken(token)
             commit('SET_USER_INFO', user)
+            return Promise.resolve()
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    },
+    // 用户注册
+    async register(_, userData) {
+        try {
+            await register(userData)
             return Promise.resolve()
         } catch (error) {
             return Promise.reject(error)

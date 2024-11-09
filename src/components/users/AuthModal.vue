@@ -163,12 +163,12 @@ export default {
 
     const onLoginSubmit = async () => {
       try {
-        await store.dispatch('user/login', { email: email.value, password: password.value });
+        await store.dispatch('user/login', { email: email.value, password: password.value });//调用store中的login方法
         await router.push({ name: 'Home' });
         // 关闭模态窗口
         emit('close');
       } catch (error) {
-        alert(error.response?.data?.error || '登录失败，请重试');
+        // alert(error.response?.data?.error || '登录失败，请重试');
       }
     };
 
@@ -184,9 +184,10 @@ export default {
           password: password.value,
         });
         alert('注册成功，请登录');
-        isLogin.value = true; // 切换回登录表单
+        isLogin.value = true;
+
       } catch (error) {
-        alert(error.response?.data?.error || '注册失败，请重试');
+        // 错误信息已经在拦截器中显示，无需额外处理
       }
     };
 
