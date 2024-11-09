@@ -8,6 +8,7 @@ import article from './modules/article'
 import category from './modules/category'
 import tag from './modules/tag'
 import comment from './modules/comment'
+import ui from './modules/ui'
 
 // 创建并导出 Vuex Store 实例
 export default createStore({
@@ -16,6 +17,7 @@ export default createStore({
         article,
         category,
         tag,
-        comment
+        comment,
+        ui,
     }
 })

@@ -1,10 +1,18 @@
 <!-- src/components/articles/ArticleDetail.vue -->
 <template>
-  <div class="max-w-5xl mx-auto flex mt-8 space-x-4">
+  <div class="max-w-5xl mx-auto flex mt-16">
     <!-- 大纲 -->
-    <Outline :content="article.content" />
+    <!-- 大纲：固定在内容的左边并偏移 -->
+    <!-- 大纲 -->
+    <div
+        class="w-64 hidden lg:block fixed transform -translate-x-1/2 duration-300 ease-in-out overflow-hidden"
+        :class="{ 'top-20': !hideNav, 'top-2': hideNav }"
+        :style="{ maxHeight: outlineMaxHeight + 'px',opacity: outlineOpacity }"
+    > <!-- 大屏时显示大纲，设置固定宽度和偏移 -->
+      <Outline :content="article.content" />
+    </div>
 
-    <div v-if="article && article.author" class="max-w-3xl mx-auto mt-8 space-y-6">
+    <div v-if="article && article.author" class="max-w-3xl mx-auto space-y-6">
 
       <!-- 标题 -->
       <h1 class="text-3xl font-bold text-gray-800">{{ article.title }}</h1>
@@ -65,7 +73,10 @@
       </div>
 
       <!-- 评论列表 -->
-      <CommentList :articleId="article._id" />
+      <!-- 评论区 -->
+      <div ref="commentSection" class="comments-section">
+        <CommentList :articleId="article._id" />
+      </div>
 
     </div>
 
@@ -80,7 +91,7 @@
 
 
 <script>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch,inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { format } from 'date-fns';
@@ -100,6 +111,10 @@ export default {
   setup() {
     const route = useRoute();
     const store = useStore();
+    const commentSection = ref(null);
+    const outlineMaxHeight = ref(window.innerHeight - 80); // 初始高度设置为视口高度减去一些间距
+    const outlineOpacity = ref(1); // 初始为完全可见
+    const hideNav = computed(() => store.getters['ui/hideNav']); // 从 Vuex 获取 hideNav 状态
 
 
     const liked = ref(false);
@@ -173,8 +188,33 @@ export default {
 
     };
 
+    // 检测评论区位置并更新大纲的最大高度
+    const handleScroll = () => {
+      if (commentSection.value) {
+        const commentTop = commentSection.value.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+        // Set outlineMaxHeight to 0 when reaching the comments section
+        outlineMaxHeight.value = commentTop <= window.innerHeight ? 0 : Math.min(window.innerHeight - 80, commentTop - 20);
+
+        // 如果评论区进入视口，则逐渐消失
+        if (commentTop < viewportHeight) {
+          const ratio = commentTop / viewportHeight; // 计算进入视口的比例
+          outlineOpacity.value = ratio; // 调整大纲透明度
+        } else {
+          outlineOpacity.value = 1;
+        }
+
+      }
+      //如果尝试移出评论区则逐步显示大纲(不需要完全移出评论区)
+
+    };
+
+
     onMounted(() => {
       loadArticle();
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll(); // 初始计算
     });
     // 监听路由参数变化
     watch(
@@ -196,6 +236,10 @@ export default {
       liked,
       toggleLike,
       renderedHtmlContent,
+      hideNav,
+      outlineMaxHeight,
+      commentSection,
+      outlineOpacity,
     };
   },
 };

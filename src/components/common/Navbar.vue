@@ -147,23 +147,26 @@ const handleScroll = () => {
   const currentScroll = window.scrollY;
 
   if (currentScroll === 0) {
+    store.dispatch('ui/updateHideNav', false);
     hideNav.value = false;
     scrollUpCount = 0;
     atTop.value = true; // 页面在顶部
   } else {
     atTop.value = false;
     if (currentScroll > lastScroll) {
+      store.dispatch('ui/updateHideNav', true); // 向下滚动时隐藏导航栏
       hideNav.value = true; // 向下滚动时隐藏导航栏
       scrollUpCount = 0;
     } else {
       scrollUpCount += 1;
       if (scrollUpCount >= 15) {
+        store.dispatch('ui/updateHideNav', false);
         hideNav.value = false;
       }
     }
   }
   lastScroll = currentScroll;
-};
+}
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);

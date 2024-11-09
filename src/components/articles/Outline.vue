@@ -1,25 +1,20 @@
-<!--src/components/articles/Outline-->
+<!--src/components/articles/Outline.vue-->
 <template>
   <div
       ref="outlineContainer"
-      class="fixed left-0 top-20 h-[calc(100vh-5rem)] overflow-y-auto bg-white shadow-lg rounded-lg"
-      :style="{ width: `${width}px` }"
+      class="max-h-[calc(100vh-8rem)] w-60 overflow-y-auto border bg-white rounded-lg"
   >
-    <div
-        class="absolute top-0 right-0 w-1 h-full cursor-ew-resize bg-gray-300 hover:bg-gray-400"
-        @mousedown="startResize"
-    ></div>
-    <h2 class="text-lg font-semibold text-gray-800 px-2 py-3 border-b">大纲</h2>
-    <ul class="py-2">
+    <h2 class="text-lg font-semibold text-gray-800 px-4 py-3 border-b sticky top-0 bg-white z-10">大纲视图</h2>
+    <ul class="py-2 px-4">
       <template v-for="(item, index) in outline" :key="index">
-        <OutlineItem :item="item" />
+        <OutlineItem :item="item" :activeId="activeId" :expandChain="expandChain" />
       </template>
     </ul>
   </div>
 </template>
 
 <script>
-import {ref, onMounted, watchEffect, onUnmounted} from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import MarkdownIt from 'markdown-it';
 import OutlineItem from './OutlineItem.vue';
 
@@ -35,13 +30,10 @@ export default {
   },
   setup(props) {
     const outline = ref([]);
+    const activeId = ref(null); // 当前滚动到的标题ID
+    const expandChain = ref([]); // 要展开的父项链条及子项
     const md = new MarkdownIt();
     const slugify = (s) => s.trim().toLowerCase().replace(/\s+/g, '-');
-
-    const width = ref(256); // 初始宽度
-    const outlineContainer = ref(null);
-    let isResizing = false;
-
 
     const generateOutline = () => {
       if (typeof props.content !== 'string' || !props.content.trim()) {
@@ -79,39 +71,63 @@ export default {
       outline.value = tempOutline;
     };
 
-    const startResize = (e) => {
-      isResizing = true;
-      document.addEventListener('mousemove', resize);
-      document.addEventListener('mouseup', stopResize);
-    };
-    const resize = (e) => {
-      if (isResizing) {
-        const newWidth = e.clientX;
-        width.value = Math.max(200, Math.min(newWidth, 600)); // 限制最小宽度为 200px，最大宽度为 600px
+    const handleScroll = () => {
+      const headings = outline.value.flatMap(getHeadings); // 获取所有标题的 DOM 元素
+      let closestHeading = null;
+      let closestDistance = Infinity;
+
+      headings.forEach((heading) => {
+        const element = document.getElementById(heading.id);
+        if (element) {
+          const distance = Math.abs(element.getBoundingClientRect().top);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestHeading = heading;
+          }
+        }
+      });
+
+      if (closestHeading) {
+        activeId.value = closestHeading.id;
+        expandChain.value = getParentChain(closestHeading.id);
       }
     };
 
-    const stopResize = () => {
-      isResizing = false;
-      document.removeEventListener('mousemove', resize);
-      document.removeEventListener('mouseup', stopResize);
+    const getHeadings = (item) => [item, ...(item.children || []).flatMap(getHeadings)];
+
+    const getParentChain = (id) => {
+      const chain = [];
+      const findChain = (items, targetId) => {
+        for (const item of items) {
+          if (item.id === targetId) {
+            chain.push(item.id);
+            if (item.children) {
+              // 将子项也添加到链条中
+              item.children.forEach((child) => chain.push(child.id));
+            }
+            return true;
+          }
+          if (item.children && findChain(item.children, targetId)) {
+            chain.push(item.id);
+            return true;
+          }
+        }
+        return false;
+      };
+      findChain(outline.value, id);
+      return chain;
     };
 
     onMounted(() => {
       generateOutline();
+      document.addEventListener('scroll', handleScroll, { passive: true });
     });
 
     watchEffect(() => {
       generateOutline();
     });
 
-    onUnmounted(() => {
-      document.removeEventListener('mousemove', resize);
-      document.removeEventListener('mouseup', stopResize);
-    });
-
-
-    return  { outline, width, outlineContainer, startResize };
+    return { outline, activeId, expandChain };
   },
 };
 </script>

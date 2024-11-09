@@ -4,10 +4,7 @@
 
   <div class="article-page">
     <Navbar />
-    <div class="container">
-      <ArticleDetail />
-    </div>
-    <Footer />
+    <ArticleDetail />
   </div>
 
 </template>
@@ -26,15 +23,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.article-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-}
-</style>
