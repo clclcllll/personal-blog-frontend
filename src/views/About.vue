@@ -12,12 +12,12 @@
           <AboutSitePanel class="flex-grow h-full" />
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6 h-[250px]">
-          <VisitorStatsPanel class="flex-grow h-full" />
+        <div class="flex flex-col md:flex-row gap-6 h-[310px]">
           <TechStackPanel class="flex-grow h-full" />
+          <VisitorStatsPanel class="flex-grow h-full" />
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6 h-[350px]">
+        <div class="flex flex-col md:flex-row gap-6 h-[360px]">
           <PhotoPanel class="flex-grow h-full" />
           <GoalsPanel class="flex-grow h-full" />
         </div>
