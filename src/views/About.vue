@@ -14,10 +14,10 @@
 
         <div class="flex flex-col md:flex-row gap-6 h-[310px]">
           <TechStackPanel class="flex-grow h-full" />
-          <VisitorStatsPanel class="flex-grow h-full" />
+          <HobbesPanel class="flex-grow h-full" />
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6 h-[360px]">
+        <div class="flex flex-col md:flex-row gap-6 h-[380px]">
           <PhotoPanel class="flex-grow h-full" />
           <GoalsPanel class="flex-grow h-full" />
         </div>
@@ -35,7 +35,7 @@ import Navbar from '@/components/common/Navbar.vue';
 import ProfileSection from "@/components/common/UserProfile.vue";
 import PersonalInfoPanel from '@/components/mobai/PersonalInfoPanel.vue';
 import AboutSitePanel from '@/components/mobai/AboutSitePanel.vue';
-import VisitorStatsPanel from '@/components/mobai/VisitorStatsPanel.vue';
+import HobbesPanel from '@/components/mobai/HobbiesPanel.vue';
 import TechStackPanel from '@/components/mobai/TechStackPanel.vue';
 import PhotoPanel from '@/components/mobai/PhotoPanel.vue';
 import GoalsPanel from '@/components/mobai/GoalsPanel.vue';
@@ -48,7 +48,7 @@ export default {
     ProfileSection,
     PersonalInfoPanel,
     AboutSitePanel,
-    VisitorStatsPanel,
+    HobbesPanel,
     TechStackPanel,
     PhotoPanel,
     GoalsPanel,
