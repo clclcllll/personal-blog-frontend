@@ -1,6 +1,5 @@
-<!-- components/mobai/GoalsPanel.vue -->
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:shadow-xl hover:scale-105">
+  <div class="w-full md:w-5/12 lg:w-1/3 bg-white rounded-lg shadow-md transform transition-transform duration-300 ">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-bold text-gray-800">目标</h2>
       <i class="fas fa-bullseye text-red-500 animate-ping"></i>

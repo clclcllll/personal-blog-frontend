@@ -4,7 +4,7 @@
       <h2 class="text-3xl font-bold text-gray-800">技术栈</h2>
       <!-- 鼠标悬停在此图标时触发小图标显示 -->
       <i
-          class="fas fa-code text-blue-500 cursor-pointer text-3xl animate-pulse"
+          class="fas fa-code text-blue-500 cursor-pointer text-3xl animate-pulse hover:scale-110"
           @mouseenter="isHovered = true"
           @mouseleave="isHovered = false"
       ></i>

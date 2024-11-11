@@ -8,7 +8,6 @@
     <p class="text-1xl">
       一款 <span class="text-red-500 font-semibold">前Vue3</span> + <span class="text-blue-500 font-semibold">后Node.js</span> + <span class="text-green-500 font-semibold">数据库MongoDB</span> 的个人博客系统
     </p>
-
     <!-- 循环诗句的容器 -->
     <div class="mt-6 overflow-hidden h-8 relative">
       <div class="scrolling-text">
@@ -21,13 +20,17 @@
           {{ line }}
         </p>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
+import TypingEffect from "@/components/common/TypingEffect.vue";
+
 export default {
   name: 'AboutSitePanel',
+  components: {TypingEffect},
   data() {
     return {
       poemLines: [

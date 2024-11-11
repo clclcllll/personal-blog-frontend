@@ -22,7 +22,7 @@
 <script>
 import Navbar from '@/components/common/Navbar.vue';
 import Footer from '@/components/common/Footer.vue';
-import ArchiveList from "@/components/common/ArchiveList.vue";
+import ArchiveList from "@/components/articles/ArchiveList.vue";
 
 export default {
   name: 'ArchivePage',
