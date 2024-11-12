@@ -7,11 +7,15 @@
 <script>
 export default {
   name: "TypingEffect",
+  props: {
+    lines: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
-      messages: [
-        "墨洒千江书不尽，松柏长青傲风霜。",
-      ],
+      messages: [],
       displayText: "",
       currentMessageIndex: 0,
       typingSpeed: 100, // 打字速度，越小越快
@@ -19,6 +23,17 @@ export default {
       delayBetweenMessages: 2000, // 切换句子的间隔时间
       isDeleting: false,
     };
+  },
+  // 初始化时，如果有传入lines，则使用传入的lines，否则使用默认的lines
+  mounted() {
+    if (this.lines.length > 0) {
+      this.messages = this.lines;
+    } else {
+      this.messages = [
+        "墨洒千江书不尽，松柏长青傲风霜。",
+      ];
+    }
+    this.typeEffect();
   },
   methods: {
     typeEffect() {
@@ -42,9 +57,6 @@ export default {
 
       setTimeout(this.typeEffect, this.isDeleting ? this.deletingSpeed : this.typingSpeed);
     },
-  },
-  mounted() {
-    this.typeEffect();
   },
 };
 </script>

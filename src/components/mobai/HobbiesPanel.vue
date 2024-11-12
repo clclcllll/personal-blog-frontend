@@ -24,11 +24,11 @@
       </h2>
 
       <div class="flex space-x-4">
-        <!-- 旅行图标 -->
+        <!-- 电影图标 -->
         <div class="relative group">
-          <i class="fas fa-plane text-blue-500 text-3xl cursor-pointer hover:scale-110 transition-transform duration-200"
-             @click="switchTab('travel')" :class="{ 'opacity-50': currentTab !== 'travel' }"></i>
-          <span class="tooltip-text opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 text-xs text-white font-semibold whitespace-nowrap">旅行</span>
+          <i class="fas fa-film text-yellow-500 text-3xl cursor-pointer hover:scale-110 transition-transform duration-200"
+             @click="switchTab('movies')" :class="{ 'opacity-50': currentTab !== 'movies' }"></i>
+          <span class="tooltip-text opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 text-xs text-white font-semibold whitespace-nowrap">电影</span>
         </div>
 
         <!-- 游戏图标 -->
@@ -44,13 +44,13 @@
              @click="switchTab('music')" :class="{ 'opacity-50': currentTab !== 'music' }"></i>
           <span class="tooltip-text opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 text-xs text-white font-semibold whitespace-nowrap">音乐</span>
         </div>
-
-        <!-- 电影图标 -->
+        <!-- 旅行图标 -->
         <div class="relative group">
-          <i class="fas fa-film text-yellow-500 text-3xl cursor-pointer hover:scale-110 transition-transform duration-200"
-             @click="switchTab('movies')" :class="{ 'opacity-50': currentTab !== 'movies' }"></i>
-          <span class="tooltip-text opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 text-xs text-white font-semibold whitespace-nowrap">电影</span>
+          <i class="fas fa-plane text-blue-500 text-3xl cursor-pointer hover:scale-110 transition-transform duration-200"
+             @click="switchTab('travel')" :class="{ 'opacity-50': currentTab !== 'travel' }"></i>
+          <span class="tooltip-text opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 text-xs text-white font-semibold whitespace-nowrap">旅行</span>
         </div>
+
       </div>
     </div>
 
@@ -82,7 +82,7 @@ export default {
   name: 'HobbiesPanel',
   components: { MusicPlayer },
   setup() {
-    const currentTab = ref('travel');
+    const currentTab = ref('movies');
     const currentMusicPoster = ref('');
     const currentBackgroundImage = ref('');
     const currentImageIndex = ref(0);

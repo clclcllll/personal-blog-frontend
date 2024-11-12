@@ -1,6 +1,6 @@
 <template>
   <div
-      class="w-full lg:w-6/10 bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-lg p-6 flex flex-col justify-between relative shadow-lg transform transition-transform duration-300 overflow-hidden"
+      class="w-full lg:w-6/10 bg-blue-500 text-white rounded-lg p-6 flex flex-col justify-between relative shadow-lg transform transition-transform duration-300 overflow-hidden"
   >
     <!-- 内容部分 -->
     <div :class="{ 'opacity-30 filter blur-sm': showMap }">

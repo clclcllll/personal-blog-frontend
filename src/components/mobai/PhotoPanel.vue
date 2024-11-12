@@ -1,7 +1,7 @@
 <template>
   <div class="w-full md:w-6/12 lg:w-2/3 bg-white rounded-lg shadow-md transform transition-transform duration-300 h-full overflow-hidden relative">
     <div class="relative w-full h-full">
-      <div class="absolute top-0 left-5 bg-opacity-60 text-white text-center text-3xl font-semibold py-2 z-10">
+      <div class="py-6 absolute top-0 left-5 bg-opacity-60 text-white text-center text-3xl font-semibold py-2 z-10">
         我的照片
       </div>
 

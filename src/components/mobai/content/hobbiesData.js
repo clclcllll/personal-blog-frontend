@@ -21,22 +21,22 @@ export const hobbiesData = {
     music: {
         tracks: [
             {
-                poster: 'src/assets/images/me1.png',
+                poster: 'src/assets/images/music1.jpg',
                 file: 'src/assets/musics/music1.mp3',
                 lrc: 'src/assets/musics/music1.lrc',  // LRC歌词文件路径
             },
             {
-                poster: 'src/assets/images/me1.png',
+                poster: 'src/assets/images/music2.jpg',
                 file: 'src/assets/musics/music2.mp3',
                 lrc: 'src/assets/musics/music2.lrc',  // LRC歌词文件路径
             },
             {
-                poster: 'src/assets/images/me1.png',
+                poster: 'src/assets/images/music3.jpg',
                 file: 'src/assets/musics/music3.mp3',
                 lrc: 'src/assets/musics/music3.lrc',  // LRC歌词文件路径
             },
             {
-                poster: 'src/assets/images/me1.png',
+                poster: 'src/assets/images/music4.jpg',
                 file: 'src/assets/musics/music4.mp3',
                 lrc: 'src/assets/musics/music4.lrc',  // LRC歌词文件路径
             },
