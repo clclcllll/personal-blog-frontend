@@ -10,7 +10,7 @@
     <div class="container mx-auto px-4 py-3 flex items-center justify-between">
       <!-- 网站 Logo -->
       <router-link to="/" class="text-2xl font-bold hover:text-blue-500 transition-colors duration-300 transform hover:scale-105">
-        My Blog
+        墨柏 Blog
       </router-link>
 
       <!-- 导航链接 -->
