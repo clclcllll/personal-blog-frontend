@@ -27,7 +27,7 @@
     <div
         @mouseenter="showOverlay = true"
         @mouseleave="showOverlay = false"
-        class="absolute top-2 right-2 rounded-full px-3 py-1 flex items-center transition-transform duration-300 transform cursor-pointer"
+        class="absolute top-6 right-2 rounded-full px-3 py-1 flex items-center transition-transform duration-300 transform cursor-pointer"
         :class="{ 'opacity-0': showOverlay }"
     >
       <i class="fas fa-info-circle text-blue-500 text-3xl animate-pulse"></i>

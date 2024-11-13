@@ -100,7 +100,7 @@
         <template v-else>
           <!-- 账户图标触发模态窗口 -->
           <button @click="openAuthModal('login')" class="hover:text-blue-600 transition duration-300 ease-in-out focus:outline-none">
-            <i class="fas fa-user"></i>
+            <i class="fas fa-sign-in-alt"></i>
           </button>
         </template>
       </div>

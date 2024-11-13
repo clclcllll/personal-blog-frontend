@@ -82,7 +82,7 @@ export default {
           }
 
           // 墨水渐变效果
-          vec3 color = vec3(0.0, 0.0, 0.3 + flow * 0.3);
+          vec3 color = vec3(0.0, 0.3, 0.6 + flow * 0.25);
           color.g += 0.5 * flow;
 
           gl_FragColor = vec4(color, 1.0);

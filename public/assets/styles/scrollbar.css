@@ -1,0 +1,35 @@
+/* 自定义垂直滚动条，使其悬浮在右侧 */
+.ps__rail-y {
+    position: fixed;
+    top: 0;
+    right: 0; /* 悬浮在窗口右侧 */
+    width: 10px; /* 调整滚动条宽度 */
+    height: 100vh; /* 滚动条高度与视口高度相同 */
+    background-color: rgba(255, 0, 0, 0.5); /* 半透明背景 */
+    z-index: 100; /* 置于最前方 */
+}
+
+.ps__thumb-y {
+    background-color: #ff0000; /* 滚动条滑块颜色 */
+    border-radius: 4px;
+    width: 10px;
+    position: relative;
+}
+
+/* 自定义水平滚动条，使其悬浮在底部 */
+.ps__rail-x {
+    position: fixed;
+    left: 0;
+    bottom: 0; /* 悬浮在窗口底部 */
+    height: 10px; /* 滚动条高度 */
+    width: 100vw; /* 滚动条宽度与视口宽度相同 */
+    background-color: rgba(255, 0, 0, 0.5); /* 半透明背景 */
+    z-index: 100; /* 置于最前方 */
+}
+
+.ps__thumb-x {
+    background-color: #ff0000; /* 滚动条滑块颜色 */
+    border-radius: 4px;
+    height: 10px;
+    position: relative;
+}

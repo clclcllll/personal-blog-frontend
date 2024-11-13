@@ -1,32 +1,54 @@
 <template>
   <div class="bg-white p-6 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg relative">
-    <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center justify-between">
-      <span>联系我</span>
-      <i class="fas fa-envelope text-blue-500 animate-pulse"></i>
-    </h2>
-    <div class="space-y-4">
-      <!-- QQ Email -->
-      <div class="flex items-center space-x-3 text-gray-700">
-        <i class="fas fa-envelope text-red-500 text-lg"></i>
-        <span class="font-medium">QQ 邮箱:</span>
-        <span class="font-semibold text-gray-800">2583086544@qq.com</span>
-      </div>
+    <!-- 内容部分 -->
+    <div :class="{ 'opacity-30 filter blur-sm': showOverlay }">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center justify-between">
+        <span>联系我</span>
+      </h2>
+      <div class="space-y-4">
+        <!-- QQ Email -->
+        <div class="flex items-center space-x-3 text-gray-700">
+          <i class="fas fa-envelope text-red-500 text-lg"></i>
+          <span class="font-medium">QQ 邮箱:</span>
+          <span class="font-semibold text-gray-800">2583086544@qq.com</span>
+        </div>
 
-      <!-- GitHub -->
-      <div class="flex items-center space-x-3 text-gray-700">
-        <i class="fab fa-github text-gray-800 text-lg"></i>
-        <span class="font-medium">GitHub:</span>
-        <a href="https://github.com/clclcllll" target="_blank" class="text-gray-700 font-semibold">
-          clclcllll
-        </a>
-      </div>
+        <!-- GitHub -->
+        <div class="flex items-center space-x-3 text-gray-700">
+          <i class="fab fa-github text-gray-800 text-lg"></i>
+          <span class="font-medium">GitHub:</span>
+          <a href="https://github.com/clclcllll" target="_blank" class="text-gray-700 font-semibold">
+            clclcllll
+          </a>
+        </div>
 
-      <!-- QQ -->
-      <div class="flex items-center space-x-3 text-gray-700">
-        <i class="fab fa-qq text-blue-500 text-lg"></i>
-        <span class="font-medium">QQ:</span>
-        <span class="font-semibold text-gray-800">2583086544</span>
+        <!-- QQ -->
+        <div class="flex items-center space-x-3 text-gray-700">
+          <i class="fab fa-qq text-blue-500 text-lg"></i>
+          <span class="font-medium">QQ:</span>
+          <span class="font-semibold text-gray-800">2583086544</span>
+        </div>
       </div>
+    </div>
+
+    <!-- 悬浮显示的欢迎信息 -->
+    <div
+        v-if="showOverlay"
+        class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 transition-opacity duration-300"
+        :class="{ 'opacity-100': showOverlay, 'opacity-0': !showOverlay }"
+    >
+      <i class="fas text-3xl fa-envelope text-blue-500 animate-pulse"></i>
+      <p class="text-xl font-semibold">欢迎联系我</p>
+    </div>
+
+    <!-- 悬浮图标 -->
+    <div
+        @mouseenter="showOverlay = true"
+        @mouseleave="showOverlay = false"
+        class="absolute top-6 right-2 rounded-full px-3 py-1 flex items-center transition-transform duration-300 transform cursor-pointer"
+        :class="{ 'opacity-0': showOverlay }"
+    >
+      <i class="fas text-3xl fa-envelope text-blue-500 animate-pulse"></i>
     </div>
 
     <!-- Canvas 用于绘制龙的运动效果 -->
@@ -40,6 +62,7 @@ export default {
   data() {
     return {
       particles: [], // 龙的粒子数组
+      showOverlay: false, // 控制悬浮信息显示
     };
   },
   mounted() {

@@ -1,21 +1,42 @@
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-md overflow-hidden">
-    <div class="flex items-center justify-between">
-      <h2 class="text-3xl font-bold text-gray-800">目标</h2>
+  <div class="bg-white p-6 rounded-lg shadow-md overflow-hidden relative">
+    <!-- 内容部分 -->
+    <div :class="{ 'opacity-30 filter blur-sm': showOverlay }">
+      <div class="flex items-center justify-between">
+        <h2 class="text-3xl font-bold text-gray-800">目标</h2>
+      </div>
+      <ul class="space-y-4 text-gray-700 overflow-y-auto max-h-[300px]">
+        <li v-for="(goal, index) in goals" :key="index"
+            class="flex items-start gap-3 p-3 rounded-lg transition-all duration-300">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">
+              <i :class="goal.icon"></i>
+            </span>
+            <span class="text-sm">{{ goal.text }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 悬浮显示的欢迎信息 -->
+    <div
+        v-if="showOverlay"
+        class="absolute inset-0 flex flex-col items-center justify-center text-gray-800 transition-opacity duration-300"
+        :class="{ 'opacity-100': showOverlay, 'opacity-0': !showOverlay }"
+    >
+      <i class="fas fa-bullseye text-red-500 text-4xl animate-pulse"></i>
+      <p class="text-xl font-semibold">Fighting</p>
+    </div>
+
+    <!-- 悬浮图标 -->
+    <div
+        @mouseenter="showOverlay = true"
+        @mouseleave="showOverlay = false"
+        class="absolute top-6 right-2 rounded-full px-3 py-1 flex items-center transition-transform duration-300 transform cursor-pointer"
+        :class="{ 'opacity-0': showOverlay }"
+    >
       <i class="fas fa-bullseye text-red-500 text-3xl animate-pulse"></i>
     </div>
-    <ul class="space-y-4 text-gray-700 overflow-y-auto max-h-[300px]">
-      <li v-for="(goal, index) in goals" :key="index"
-          class="flex items-start gap-3 p-3 rounded-lg transition-all duration-300">
-        <div class="flex items-center gap-2">
-          <!-- 使用 Font Awesome 图标 -->
-          <span class="text-2xl">
-            <i :class="goal.icon"></i>
-          </span>
-          <span class="text-sm">{{ goal.text }}</span>
-        </div>
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -44,9 +65,16 @@ export default {
       }
     ])
 
+    const showOverlay = ref(false)
+
     return {
-      goals
+      goals,
+      showOverlay
     }
   }
 }
 </script>
+
+<style scoped>
+/* 可选的额外样式 */
+</style>
