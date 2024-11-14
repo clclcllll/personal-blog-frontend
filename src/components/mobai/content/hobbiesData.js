@@ -3,16 +3,16 @@
 export const hobbiesData = {
     travel: {
         images: [
-            '/assets/images/scene1.webp',
-            '/assets/images/scene3.webp',
-            '/assets/images/scene4.webp',
-            '/assets/images/scene5.webp',
+            '/assets/images/scene1.jpg',
+            '/assets/images/scene3.jpg',
+            '/assets/images/scene4.jpg',
+            '/assets/images/scene5.jpg',
         ],
     },
     games: {
         images: [
-            '/assets/images/game1.webp',
-            '/assets/images/game2.jpeg',
+            '/assets/images/game1.jpg',
+            '/assets/images/game2.jpg',
             '/assets/images/game3.jpg',
             '/assets/images/game4.jpg',
             '/assets/images/game5.jpg',
@@ -45,7 +45,7 @@ export const hobbiesData = {
     movies: {
         images: [
             '/assets/images/film1.jpg',
-            '/assets/images/film2.jpeg',
+            '/assets/images/film2.jpg',
             '/assets/images/film3.jpg',
             '/assets/images/film4.jpg',
         ],
